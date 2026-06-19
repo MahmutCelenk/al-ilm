@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Al-Ilm">
+  <rect width="64" height="64" rx="14" fill="#f7fbf7"/>
+  <path d="M12 43c5.9-2.8 12.6-4 20-3.7 7.4-.3 14.1.9 20 3.7" fill="none" stroke="#005642" stroke-width="3.2" stroke-linecap="round"/>
+  <path d="M16 20c6.2.4 11.6 3 16 7.6 4.4-4.6 9.8-7.2 16-7.6v21c-6.2-.4-11.6-2.8-16-7.3-4.4 4.5-9.8 6.9-16 7.3V20Z" fill="#a6f2d1" stroke="#005642" stroke-width="2.8" stroke-linejoin="round"/>
+  <path d="M32 27.6v14.1" stroke="#005642" stroke-width="2.8" stroke-linecap="round"/>
+  <path d="M20 46.5h24" stroke="#7a5a00" stroke-width="3.2" stroke-linecap="round"/>
+</svg>

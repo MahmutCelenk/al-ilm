@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-label="Sakin bir İslami öğrenme alanı">
+  <rect width="1200" height="900" fill="#f3f4f3"/>
+  <rect x="92" y="96" width="1016" height="708" rx="36" fill="#ffffff"/>
+  <path d="M214 665h772" stroke="#bec9c2" stroke-width="4" stroke-linecap="round"/>
+  <path d="M270 232h660v430H270z" fill="#e8e8e7"/>
+  <path d="M330 296h540v312H330z" fill="#f9f9f8"/>
+  <path d="M600 168c92 68 154 146 186 234H414c32-88 94-166 186-234z" fill="#065f46"/>
+  <path d="M600 212c62 50 105 106 130 168H470c25-62 68-118 130-168z" fill="#8bd6b6"/>
+  <circle cx="600" cy="388" r="50" fill="#fed65b"/>
+  <rect x="390" y="702" width="420" height="22" rx="11" fill="#004532"/>
+  <rect x="462" y="618" width="276" height="72" rx="18" fill="#735c00"/>
+  <path d="M512 618c20-46 156-46 176 0" fill="none" stroke="#fed65b" stroke-width="14" stroke-linecap="round"/>
+</svg>

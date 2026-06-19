@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background font-sans text-on-surface antialiased;
+  }
+
+  ::selection {
+    @apply bg-primary-fixed text-primary;
+  }
+}
+
+@layer components {
+  .container-shell {
+    @apply mx-auto w-full max-w-container px-4 md:px-12;
+  }
+
+  .surface-card {
+    @apply rounded-xl bg-surface-container-lowest shadow-manuscript;
+  }
+
+  .section-kicker {
+    @apply flex items-center gap-3 text-primary;
+  }
+
+  .section-kicker::before {
+    content: '';
+    @apply h-1 w-8 rounded-full bg-primary;
+  }
+}

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="Sakin ve modern bir mescid iç mekanı">
+  <rect width="1200" height="675" fill="#f9f9f8"/>
+  <path d="M0 530h1200v145H0z" fill="#e8e8e7"/>
+  <path d="M92 80h1016v450H92z" fill="#ffffff"/>
+  <path d="M190 132h820v350H190z" fill="#eeeeed"/>
+  <path d="M600 86c116 86 196 187 240 302H360c44-115 124-216 240-302z" fill="#004532"/>
+  <path d="M600 148c76 64 130 134 162 216H438c32-82 86-152 162-216z" fill="#8bd6b6"/>
+  <path d="M286 516h628" stroke="#bec9c2" stroke-width="5" stroke-linecap="round"/>
+  <path d="M378 554h444" stroke="#065f46" stroke-width="12" stroke-linecap="round"/>
+  <circle cx="600" cy="366" r="54" fill="#fed65b"/>
+  <path d="M120 530c116-56 220-84 312-84 95 0 173 28 236 84" fill="none" stroke="#a6f2d1" stroke-width="16" stroke-linecap="round"/>
+  <path d="M668 530c70-47 146-70 228-70 70 0 132 23 184 70" fill="none" stroke="#ccc5c2" stroke-width="16" stroke-linecap="round"/>
+</svg>
