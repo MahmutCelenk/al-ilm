@@ -105,7 +105,8 @@
 import { surahs } from '~/data/surahs'
 
 definePageMeta({
-  layout: false
+  layout: false,
+  path: '/kuran'
 })
 
 type QuranVerse = {

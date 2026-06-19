@@ -313,6 +313,10 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  path: '/namaz'
+})
+
 useSeoMeta({
   title: 'Namaz Öğren',
   description: 'Sabah, öğle, ikindi, akşam, yatsı, teravih ve bayram namazlarını adım adım öğren.'

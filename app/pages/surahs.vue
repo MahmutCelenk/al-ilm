@@ -7,6 +7,10 @@
 <script setup lang="ts">
 import { surahs } from '~/data/surahs'
 
+definePageMeta({
+  path: '/sureler'
+})
+
 useSeoMeta({
   title: 'Sureler',
   description: 'Kur’an surelerini Arapça metin ve Türkçe anlamıyla arayıp oku.'

@@ -1,7 +1,5 @@
 <template>
   <main class="farz-page">
-    <div class="farz-progress" :style="{ width: `${scrollProgress}%` }" aria-hidden="true" />
-
     <header class="farz-header">
       <nav class="farz-container farz-nav" aria-label="32 Farz rehberi">
         <NuxtLink to="/" class="farz-brand">
@@ -29,20 +27,82 @@
       <div class="farz-hero-glow farz-hero-glow-right" aria-hidden="true" />
 
       <div class="farz-container farz-hero-inner">
-        <p class="farz-eyebrow">Al-Ilm Platformu Sunar</p>
+        <p class="farz-eyebrow">Temel Bilgiler</p>
         <h1>32 Farz</h1>
         <p class="farz-hero-copy">
-          İslam'ın temel ibadet ve inanç esaslarını tek sayfada, sakin ve düzenli bir
-          öğrenme akışıyla keşfet.
+          İman, ibadet ve temizlikle ilgili temel farzları; anlamlarıyla birlikte sırayla
+          öğren.
         </p>
 
         <div class="farz-hero-actions">
-          <a href="#iman" class="farz-button farz-button-primary">
-            Başla
+          <a href="#islam" class="farz-button farz-button-primary">
+            Farzları İncele
             <span aria-hidden="true">↓</span>
           </a>
-          <a href="#namaz" class="farz-button farz-button-secondary">Müfredatı Görüntüle</a>
         </div>
+      </div>
+    </section>
+
+    <section id="islam" class="farz-section farz-section-tinted">
+      <div class="farz-container">
+        <div class="farz-section-heading farz-islam-heading">
+          <div>
+            <p class="farz-kicker">Temel ibadetler</p>
+            <h2>İslam'ın Şartları</h2>
+            <p>Müslüman olmanın ve dini yaşamanın beş temel şartını, anlamlarıyla birlikte kavra.</p>
+          </div>
+        </div>
+
+        <div class="farz-islam-picker" role="tablist" aria-label="İslam'ın şartları">
+          <button
+            v-for="(item, index) in islamConditions"
+            :key="item.id"
+            type="button"
+            role="tab"
+            :aria-selected="selectedIslamConditionId === item.id"
+            :class="['farz-islam-picker-card', { 'is-active': selectedIslamConditionId === item.id }]"
+            @click="selectedIslamConditionId = item.id"
+          >
+            <span>{{ pad(index + 1) }}</span>
+            <strong>{{ item.title }}</strong>
+          </button>
+        </div>
+
+        <article class="farz-islam-detail">
+          <template v-if="selectedIslamConditionId === 'shahada'">
+            <div class="farz-shahada-topline">
+              <span>{{ pad(1) }}</span>
+              <p>İslam'a giriş ifadesi</p>
+            </div>
+            <h3>{{ shahada.title }}</h3>
+            <p class="farz-shahada-description">{{ shahada.description }}</p>
+
+            <div class="farz-shahada-text">
+              <p class="farz-shahada-label">Arapça metin</p>
+              <p class="farz-shahada-arabic" lang="ar" dir="rtl">{{ shahada.arabic }}</p>
+            </div>
+
+            <div class="farz-shahada-details">
+              <div>
+                <p>Okunuşu</p>
+                <strong>{{ shahada.latin }}</strong>
+              </div>
+              <div>
+                <p>Türkçe anlamı</p>
+                <strong>{{ shahada.meaning }}</strong>
+              </div>
+            </div>
+          </template>
+
+          <template v-else>
+            <div class="farz-shahada-topline">
+              <span>{{ pad(selectedIslamConditionIndex + 1) }}</span>
+              <p>İslam'ın şartlarından biri</p>
+            </div>
+            <h3>{{ selectedIslamCondition.title }}</h3>
+            <p class="farz-islam-detail-copy">{{ selectedIslamCondition.detail }}</p>
+          </template>
+        </article>
       </div>
     </section>
 
@@ -50,11 +110,9 @@
       <div class="farz-container">
         <div class="farz-section-heading">
           <div>
-            <p class="farz-kicker">Birinci bölüm</p>
             <h2>İmanın Şartları</h2>
             <p>İmanın temelini oluşturan ve her müminin kalpten inanması gereken altı ana rükün.</p>
           </div>
-          <span class="farz-count">06</span>
         </div>
 
         <div class="farz-card-grid">
@@ -63,23 +121,6 @@
             <span class="farz-card-number">{{ pad(index + 1) }}</span>
             <h3>{{ item.title }}</h3>
             <p>{{ item.description }}</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section id="islam" class="farz-section farz-section-tinted">
-      <div class="farz-container">
-        <div class="farz-centered-heading">
-          <p class="farz-kicker">Temel ibadetler</p>
-          <h2>İslam'ın Şartları</h2>
-          <p>Müslüman olmanın ve dini yaşamanın beş temel şartı.</p>
-        </div>
-
-        <div class="farz-pill-grid">
-          <article v-for="(item, index) in islamConditions" :key="item.title" class="farz-pill-card">
-            <span>{{ pad(index + 1) }}</span>
-            <strong>{{ item.title }}</strong>
           </article>
         </div>
       </div>
@@ -103,9 +144,12 @@
               </div>
             </div>
             <ol>
-              <li v-for="(item, index) in prayerOuterFards" :key="item">
+              <li v-for="(item, index) in prayerOuterFards" :key="item.title">
                 <span>{{ pad(index + 1) }}</span>
-                {{ item }}
+                <div>
+                  <strong>{{ item.title }}</strong>
+                  <p>{{ item.description }}</p>
+                </div>
               </li>
             </ol>
           </article>
@@ -119,9 +163,12 @@
               </div>
             </div>
             <ol>
-              <li v-for="(item, index) in prayerInnerFards" :key="item">
+              <li v-for="(item, index) in prayerInnerFards" :key="item.title">
                 <span>{{ pad(index + 1) }}</span>
-                {{ item }}
+                <div>
+                  <strong>{{ item.title }}</strong>
+                  <p>{{ item.description }}</p>
+                </div>
               </li>
             </ol>
           </article>
@@ -190,7 +237,8 @@
 
 <script setup lang="ts">
 definePageMeta({
-  layout: false
+  layout: false,
+  path: '/temel-bilgiler'
 })
 
 type FaithItem = {
@@ -204,17 +252,22 @@ type TextItem = {
   description: string
 }
 
+type IslamCondition = TextItem & {
+  id: string
+  detail: string
+}
+
 type AblutionItem = TextItem & {
   image: string
   alt: string
 }
 
-const scrollProgress = ref(0)
-const activeSection = ref('iman')
+const activeSection = ref('islam')
+const selectedIslamConditionId = ref('shahada')
 
 const quickLinks = [
-  { id: 'iman', label: 'İman', href: '#iman' },
   { id: 'islam', label: 'İslam', href: '#islam' },
+  { id: 'iman', label: 'İman', href: '#iman' },
   { id: 'namaz', label: 'Namaz', href: '#namaz' },
   { id: 'abdest', label: 'Abdest', href: '#abdest' },
   { id: 'gusul', label: 'Gusül', href: '#gusul' },
@@ -230,41 +283,72 @@ const faithConditions: FaithItem[] = [
   { title: 'Kader ve Kazaya İman', description: "Hayır ve şerrin Allah'ın takdiri ile olduğuna inanmaktır.", icon: '✺' }
 ]
 
-const islamConditions = [
-  { title: 'Kelime-i Şehadet' },
-  { title: 'Namaz' },
-  { title: 'Zekat' },
-  { title: 'Oruç' },
-  { title: 'Hac' }
+const shahada = {
+  title: 'Kelime-i Şehadet',
+  description: "Allah'ın birliğini ve Hz. Muhammed'in O'nun kulu ve elçisi olduğunu ifade eden şahitlik sözüdür.",
+  arabic: 'أَشْهَدُ أَنْ لَا إِلٰهَ إِلَّا اللّٰهُ وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ',
+  latin: 'Eşhedü en lâ ilâhe illallah ve eşhedü enne Muhammeden abdühû ve resûlüh.',
+  meaning: "Şahitlik ederim ki Allah'tan başka ilah yoktur. Yine şahitlik ederim ki Muhammed O'nun kulu ve elçisidir."
+}
+
+const islamConditions: IslamCondition[] = [
+  { id: 'shahada', title: 'Kelime-i Şehadet', description: 'Allah’ın birliğine ve Peygamberimizin elçiliğine şahitlik etmektir.', detail: shahada.description },
+  { id: 'prayer', title: 'Namaz', description: 'Belirli vakitlerde Allah’a yönelerek namaz kılmaktır.', detail: 'Namaz, Müslümanın gün içinde belirli vakitlerde Allah’a yönelerek yerine getirdiği ibadettir. Hazırlık, kıyam, rükû, secde ve selamdan oluşan ana akışla öğrenilebilir.' },
+  { id: 'alms', title: 'Zekat', description: 'İhtiyaç sahiplerine belirlenen ölçüde vermektir.', detail: 'Zekat, mali imkanı olan Müslümanların belirli şartlarla ihtiyaç sahiplerine verdiği ibadettir. Paylaşmayı, sosyal dayanışmayı ve malın bereketini hatırlatır.' },
+  { id: 'fasting', title: 'Oruç', description: 'Ramazan ayında imsak ile iftar arasında oruç tutmaktır.', detail: 'Oruç, Ramazan ayında imsak vaktinden iftara kadar yeme, içme ve orucu bozan davranışlardan uzak durmaktır. Sabır ve bilinçle geçirilen bir ibadet vaktidir.' },
+  { id: 'pilgrimage', title: 'Hac', description: "Gücü yetenlerin Kabe'yi ziyaret etmesidir.", detail: "Hac, maddi ve bedeni imkanı olan Müslümanların belirli zamanda Kabe'yi ziyaret ederek yerine getirdiği ibadettir. Ömründe bir kez farzdır." }
 ]
 
-const prayerOuterFards = ['Hadesten Taharet', 'Necasetten Taharet', 'Setr-i Avret', 'İstikbal-i Kıble', 'Vakit', 'Niyet']
-const prayerInnerFards = ['İftitah Tekbiri', 'Kıyam', 'Kıraat', 'Rükû', 'Sücud', "Ka'de-i Ahire"]
+const selectedIslamCondition = computed(() =>
+  islamConditions.find(item => item.id === selectedIslamConditionId.value) ?? islamConditions[0]!
+)
+
+const selectedIslamConditionIndex = computed(() =>
+  islamConditions.findIndex(item => item.id === selectedIslamConditionId.value)
+)
+
+const prayerOuterFards: TextItem[] = [
+  { title: 'Hadesten Taharet', description: 'Namazdan önce abdestli olmak; gerektiğinde gusül veya teyemmüm ile temizlenmektir.' },
+  { title: 'Necasetten Taharet', description: 'Bedenin, elbisenin ve namaz kılınacak yerin ibadete engel kirlerden temiz olmasıdır.' },
+  { title: 'Setr-i Avret', description: 'Namazda örtülmesi gereken yerleri uygun ve temiz bir kıyafetle örtmektir.' },
+  { title: 'İstikbal-i Kıble', description: 'Namaza başlarken kıble yönüne, yani Kâbe’ye doğru dönmektir.' },
+  { title: 'Vakit', description: 'Her namazı kendi vakti girdikten sonra kılmaktır.' },
+  { title: 'Niyet', description: 'Kılınacak namazı kalben belirlemek ve hangi namaz için durduğunu bilmektir.' }
+]
+
+const prayerInnerFards: TextItem[] = [
+  { title: 'İftitah Tekbiri', description: 'Eller kaldırılarak “Allahu Ekber” denir ve namaza başlanır.' },
+  { title: 'Kıyam', description: 'Gücü yeten kişinin farz namazda ayakta durmasıdır.' },
+  { title: 'Kıraat', description: 'Kıyamdayken Kur’an’dan Fâtiha ve ardından bir sure veya ayet okumaktır.' },
+  { title: 'Rükû', description: 'Eller dizlere konularak eğilmek ve rükû tesbihini okumaktır.' },
+  { title: 'Sücud', description: 'Alın ve burnu yere koyarak secdeye varmak; secde tesbihini okumaktır.' },
+  { title: "Ka'de-i Ahire", description: 'Namazın son rekâtında oturup ettehiyyatü okuyacak kadar beklemektir.' }
+]
 
 const ablutionFards: AblutionItem[] = [
   {
     title: 'Yüzü Yıkamak',
     description: 'Alın saç bitiminden çene altına, kulak yumuşaklarına kadar yüzü yıkamak.',
-    image: '/images/articles/abdest-cover.png',
-    alt: 'Abdest ve arınmayı temsil eden sakin su görseli'
+    image: '/images/articles/abdest-yuzu-yikamak.png',
+    alt: 'Abdest alırken yüzü yıkamak'
   },
   {
     title: 'Kolları Yıkamak',
     description: 'Ellerle beraber dirsekleri de dahil ederek kolları yıkamak.',
-    image: '/images/prayer-page-hero.png',
-    alt: 'İbadete hazırlığı temsil eden sakin mescid görseli'
+    image: '/images/articles/abdest-kollari-yikamak.png',
+    alt: 'Abdest alırken kolları dirseklerle birlikte yıkamak'
   },
   {
     title: 'Başa Mesh Etmek',
     description: 'Başın en az bir kısmını ıslak el ile mesh etmek.',
-    image: '/images/learning-space.svg',
-    alt: 'Öğrenme alanını temsil eden sade illüstrasyon'
+    image: '/images/articles/abdest-basa-mesh.png',
+    alt: 'Abdest alırken başa mesh etmek'
   },
   {
     title: 'Ayakları Yıkamak',
     description: 'Topuklarla birlikte ayakları yıkamak.',
-    image: '/images/prayer-space.svg',
-    alt: 'Temiz ve sakin ibadet alanı illüstrasyonu'
+    image: '/images/articles/abdest-ayaklari-yikamak.png',
+    alt: 'Abdest alırken ayakları topuklarla birlikte yıkamak'
   }
 ]
 
@@ -283,9 +367,6 @@ const tayammumFards: TextItem[] = [
 const pad = (value: number) => String(value).padStart(2, '0')
 
 const updateScrollState = () => {
-  const documentHeight = document.documentElement.scrollHeight - window.innerHeight
-  scrollProgress.value = documentHeight > 0 ? (window.scrollY / documentHeight) * 100 : 0
-
   const sections = quickLinks
     .map(link => document.getElementById(link.id))
     .filter((section): section is HTMLElement => Boolean(section))
@@ -326,16 +407,6 @@ useSeoMeta({
   background: var(--farz-surface);
   color: #121c2a;
   font-family: Inter, system-ui, sans-serif;
-}
-
-.farz-progress {
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 80;
-  height: 4px;
-  background: linear-gradient(90deg, var(--farz-primary), var(--farz-secondary));
-  transition: width 0.12s ease;
 }
 
 .farz-container {
@@ -658,38 +729,138 @@ useSeoMeta({
   margin-inline: auto;
 }
 
-.farz-pill-grid {
+.farz-islam-heading {
+  align-items: flex-end;
+}
+
+.farz-islam-picker {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 18px;
+  gap: 12px;
 }
 
-.farz-pill-card {
-  display: grid;
-  min-height: 154px;
-  place-items: center;
-  border: 1px solid rgba(0, 53, 39, 0.1);
-  border-radius: 20px;
-  background: #fff;
-  padding: 24px;
-  text-align: center;
-  box-shadow: 0 8px 28px rgba(0, 53, 39, 0.04);
+.farz-islam-picker-card {
+  display: flex;
+  min-height: 94px;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid rgba(0, 53, 39, 0.14);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.74);
+  padding: 16px;
+  color: var(--farz-primary);
+  text-align: left;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
 }
 
-.farz-pill-card span {
+.farz-islam-picker-card:hover,
+.farz-islam-picker-card.is-active {
+  border-color: var(--farz-primary);
+  background: #fffef9;
+  transform: translateY(-2px);
+}
+
+.farz-islam-picker-card span,
+.farz-shahada-topline span {
   display: grid;
-  width: 48px;
-  height: 48px;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
   place-items: center;
   border-radius: 999px;
   background: #fed65b;
   color: #745c00;
+  font-size: 12px;
   font-weight: 900;
 }
 
-.farz-pill-card strong {
+.farz-islam-picker-card strong {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 18px;
+  line-height: 1.1;
+}
+
+.farz-islam-detail {
+  margin-top: 18px;
+  border: 1px solid rgba(0, 53, 39, 0.18);
+  border-radius: 24px;
+  background: #fffef9;
+  padding: 34px;
+  box-shadow: 0 16px 42px rgba(0, 53, 39, 0.06);
+}
+
+.farz-shahada-topline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.farz-shahada-topline p,
+.farz-shahada-label,
+.farz-shahada-details p {
+  margin: 0;
+  color: var(--farz-secondary);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.farz-islam-detail h3 {
+  margin: 26px 0 0;
   color: var(--farz-primary);
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(34px, 4vw, 48px);
+  line-height: 1.05;
+}
+
+.farz-shahada-description {
+  max-width: 590px;
+  margin: 14px 0 0;
+  color: var(--farz-muted);
   font-size: 15px;
+  line-height: 1.65;
+}
+
+.farz-shahada-text {
+  margin-top: 28px;
+  border-block: 1px solid rgba(0, 53, 39, 0.12);
+  padding-block: 20px;
+}
+
+.farz-shahada-arabic {
+  margin: 14px 0 0;
+  color: #082c23;
+  font-family: "Amiri Quran", Amiri, serif;
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 1.7;
+  text-align: right;
+}
+
+.farz-shahada-details {
+  display: grid;
+  gap: 18px;
+  margin-top: 22px;
+}
+
+.farz-shahada-details div {
+  display: grid;
+  gap: 7px;
+}
+
+.farz-shahada-details strong {
+  color: #24302a;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.65;
+}
+
+.farz-islam-detail-copy {
+  max-width: 760px;
+  margin: 18px 0 0;
+  color: var(--farz-muted);
+  font-size: 17px;
+  line-height: 1.75;
 }
 
 .farz-prayer-grid,
@@ -754,7 +925,7 @@ useSeoMeta({
 
 .farz-list-panel li {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 14px;
   border: 1px solid rgba(191, 201, 195, 0.64);
   border-radius: 12px;
@@ -780,6 +951,20 @@ useSeoMeta({
 .farz-list-panel-gold li span {
   background: var(--farz-gold-soft);
   color: var(--farz-secondary);
+}
+
+.farz-list-panel li strong {
+  display: block;
+  color: #121c2a;
+  font-size: 15px;
+}
+
+.farz-list-panel li p {
+  margin: 5px 0 0;
+  color: var(--farz-muted);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.55;
 }
 
 .farz-abdest-grid {
@@ -921,7 +1106,7 @@ useSeoMeta({
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .farz-pill-grid {
+  .farz-islam-picker {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
@@ -976,8 +1161,12 @@ useSeoMeta({
   .farz-prayer-grid,
   .farz-abdest-grid,
   .farz-purification-grid,
-  .farz-pill-grid {
+  .farz-islam-picker {
     grid-template-columns: 1fr;
+  }
+
+  .farz-islam-detail {
+    padding: 24px;
   }
 }
 </style>
