@@ -1,107 +1,296 @@
 <template>
-  <main class="quran-reader">
+  <main
+    class="quran-reader"
+    :style="readerStyle"
+  >
     <header class="reader-header">
-      <NuxtLink to="/" class="back-link" aria-label="Siteye dön">
-        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <NuxtLink to="/" class="reader-back" aria-label="Siteye dön">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="m15 18-6-6 6-6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
         Siteye dön
       </NuxtLink>
 
-      <div class="reader-title">
-        <div>
-          <p>Kur'an Oku</p>
-          <span>{{ spreadSurahNames }}</span>
-        </div>
+      <div class="reader-brand">
+        <strong>KUR'AN-I KERİM</strong>
+        <span>Kur'an ve meal okuma alanı</span>
       </div>
-      <div class="reader-header-end" />
+
+      <nav class="reader-navigation" aria-label="Kur'an konumu">
+        <div class="reader-picker reader-picker-surah" data-reader-picker>
+          <span class="reader-control-label">Sûre</span>
+          <button
+            id="surah-picker-trigger"
+            type="button"
+            class="reader-picker-trigger"
+            aria-haspopup="listbox"
+            :aria-expanded="openPicker === 'surah'"
+            aria-controls="surah-picker-menu"
+            @click="togglePicker('surah')"
+          >
+            <span><b>{{ currentSurah?.id }}.</b> {{ currentSurah?.name }}</span>
+            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="m6 8 4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+
+          <div v-if="openPicker === 'surah'" id="surah-picker-menu" class="reader-picker-menu" role="listbox" aria-labelledby="surah-picker-trigger">
+            <label class="reader-picker-search">
+              <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <circle cx="8.5" cy="8.5" r="5" stroke="currentColor" stroke-width="1.5" />
+                <path d="m12.2 12.2 3.3 3.3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+              </svg>
+              <input v-model="surahSearch" type="search" placeholder="Sûre ara..." autocomplete="off" autofocus>
+            </label>
+
+            <div class="reader-picker-options reader-surah-options">
+              <button
+                v-for="surah in filteredSurahs"
+                :key="surah.id"
+                type="button"
+                role="option"
+                :aria-selected="currentSurah?.id === surah.id"
+                :class="{ active: currentSurah?.id === surah.id }"
+                @click="selectSurah(surah.id)"
+              >
+                <span><b>{{ surah.id }}</b><strong>{{ surah.name }}</strong></span>
+                <small dir="rtl" lang="ar">{{ surah.arabicName }}</small>
+              </button>
+              <p v-if="filteredSurahs.length === 0" class="reader-picker-empty">Eşleşen sûre bulunamadı.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reader-picker reader-picker-ayah" data-reader-picker>
+          <span class="reader-control-label">Âyet</span>
+          <button
+            id="ayah-picker-trigger"
+            type="button"
+            class="reader-picker-trigger"
+            aria-haspopup="listbox"
+            :aria-expanded="openPicker === 'ayah'"
+            aria-controls="ayah-picker-menu"
+            @click="togglePicker('ayah')"
+          >
+            <span>{{ currentAyah }}</span>
+            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="m6 8 4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+
+          <div v-if="openPicker === 'ayah'" id="ayah-picker-menu" class="reader-picker-menu reader-picker-menu-ayah" role="listbox" aria-labelledby="ayah-picker-trigger">
+            <div class="reader-picker-menu-title">
+              <strong>Âyet seç</strong>
+              <span>{{ activeSurahVerseCount }} âyet</span>
+            </div>
+            <div class="reader-picker-options reader-ayah-options">
+              <button
+                v-for="ayah in activeSurahVerseCount"
+                :key="ayah"
+                type="button"
+                role="option"
+                :aria-selected="currentAyah === ayah"
+                :class="{ active: currentAyah === ayah }"
+                @click="selectAyah(ayah)"
+              >
+                {{ ayah }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="reader-view-switch" role="group" aria-label="Okuma görünümü">
+          <button
+            type="button"
+            :class="{ active: readerView === 'spread' }"
+            :aria-pressed="readerView === 'spread'"
+            title="Kur'an ve meali birlikte göster"
+            @click="selectReaderView('spread')"
+          >
+            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <rect x="2.5" y="4" width="6.2" height="12" rx="1.4" stroke="currentColor" stroke-width="1.4" />
+              <rect x="11.3" y="4" width="6.2" height="12" rx="1.4" stroke="currentColor" stroke-width="1.4" />
+            </svg>
+            <span>İki Sayfa</span>
+          </button>
+          <button
+            type="button"
+            :class="{ active: readerView === 'arabic' }"
+            :aria-pressed="readerView === 'arabic'"
+            title="Yalnızca Kur'an sayfasını göster"
+            @click="selectReaderView('arabic')"
+          >
+            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <rect x="4.5" y="3" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.4" />
+              <path d="M7.5 7h5M7.5 10h5M7.5 13h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+            </svg>
+            <span>Kur'an</span>
+          </button>
+          <button
+            type="button"
+            :class="{ active: readerView === 'meal' }"
+            :aria-pressed="readerView === 'meal'"
+            title="Yalnızca meal sayfasını göster"
+            @click="selectReaderView('meal')"
+          >
+            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <rect x="4.5" y="3" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.4" />
+              <path d="M7.5 7h5M7.5 10h5M7.5 13h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+            </svg>
+            <span>Meal</span>
+          </button>
+        </div>
+
+      </nav>
+
+      <div class="reader-font-controls" aria-label="Yazı boyutu">
+        <button type="button" :disabled="readerFontScale <= 0.9" aria-label="Yazıyı küçült" @click="changeFontScale(-0.1)">A−</button>
+        <button type="button" :disabled="readerFontScale >= 1.2" aria-label="Yazıyı büyüt" @click="changeFontScale(0.1)">A+</button>
+      </div>
     </header>
 
-    <section class="reader-stage">
-      <form class="page-jump stage-page-jump" @submit.prevent="goToInputPage">
-        <label for="quran-page">Sayfa</label>
-        <input id="quran-page" v-model="pageInput" inputmode="numeric" aria-label="Gitmek istediğin sayfa">
-        <span>/ {{ totalPages }}</span>
-      </form>
+    <div class="reader-mobile-tabs" role="tablist" aria-label="Okuma paneli">
+      <button
+        id="arabic-tab"
+        type="button"
+        role="tab"
+        :aria-selected="mobilePanel === 'arabic'"
+        aria-controls="arabic-panel"
+        :class="{ active: mobilePanel === 'arabic' }"
+        @click="selectReaderView('arabic')"
+      >
+        Kur'an
+      </button>
+      <button
+        id="meal-tab"
+        type="button"
+        role="tab"
+        :aria-selected="mobilePanel === 'meal'"
+        aria-controls="meal-panel"
+        :class="{ active: mobilePanel === 'meal' }"
+        @click="selectReaderView('meal')"
+      >
+        Meal
+      </button>
+    </div>
+
+    <section class="reader-workspace" :class="`view-${readerView}`" aria-label="Mushaf ve meal">
+      <article
+        id="arabic-panel"
+        class="reader-panel reader-panel-arabic"
+        :class="{ 'mobile-panel-active': mobilePanel === 'arabic' }"
+        role="tabpanel"
+        aria-labelledby="arabic-tab"
+      >
+        <header class="reader-panel-header">
+          <span>{{ currentPage }}</span>
+          <strong dir="rtl" lang="ar">{{ pageTitleArabic }}</strong>
+          <span>{{ currentPage }} / {{ totalPages }}</span>
+        </header>
+
+        <div ref="arabicPanelBody" class="reader-panel-body arabic-page" dir="rtl" lang="ar">
+          <section v-for="group in pageGroups" :key="`arabic-${group.surahId}`" class="arabic-surah-section">
+            <div v-if="group.beginsHere" class="surah-opening">
+              <strong>{{ group.arabicName }}</strong>
+              <p v-if="group.surahId !== 1 && group.surahId !== 9">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
+            </div>
+
+            <div class="arabic-verse-flow">
+              <button
+                v-for="verse in group.verses"
+                :id="`arabic-verse-${verse.surahId}-${verse.number}`"
+                :key="`${verse.surahId}-${verse.number}`"
+                type="button"
+                class="arabic-verse"
+                :class="{ active: isArabicVerseActive(verse.surahId, verse.number) }"
+                :aria-pressed="isArabicVerseActive(verse.surahId, verse.number)"
+                :aria-label="`${verse.surahName} Sûresi ${verse.number}. âyet`"
+                @click="activateVerse(verse.surahId, verse.number, 'arabic')"
+              >
+                <span>{{ verse.arabic }}</span>
+                <b aria-hidden="true">{{ toArabicNumber(verse.number) }}</b>
+              </button>
+            </div>
+          </section>
+        </div>
+
+        <footer class="reader-panel-footer">{{ currentPage }}</footer>
+      </article>
 
       <article
-        class="book-shell"
-        :class="[
-          { 'is-turning': isTurning },
-          turnDirection === 'next' ? 'turning-next' : 'turning-previous'
-        ]"
+        id="meal-panel"
+        class="reader-panel reader-panel-meal"
+        :class="{ 'mobile-panel-active': mobilePanel === 'meal' }"
+        role="tabpanel"
+        aria-labelledby="meal-tab"
       >
-        <section class="book-page book-page-arabic">
-          <div class="page-frame" aria-hidden="true" />
-          <div class="page-inner">
-            <header class="page-heading">
-              <p class="page-kicker">Mushaf sayfası</p>
-              <h1 dir="rtl" lang="ar">{{ pageTitleArabic }}</h1>
-              <span>{{ arabicPageMeta }}</span>
-            </header>
+        <header class="reader-panel-header">
+          <span>Kur'an Yolu Meali</span>
+          <strong>{{ pageTitleTurkish }}</strong>
+          <span>{{ currentPage }}</span>
+        </header>
 
-            <div class="arabic-flow" dir="rtl" lang="ar" :style="arabicFitStyle">
-              <template v-for="verse in pageVerses" :key="`${verse.surahId}-${verse.number}`">
-                <span>{{ verse.arabic }}</span>
-                <sup>{{ verse.number }}</sup>
-              </template>
+        <div ref="mealPanelBody" class="reader-panel-body meal-page">
+          <section v-for="group in pageMealGroups" :key="`meal-${group.surahId}`" class="meal-surah-section">
+            <div v-if="group.beginsHere" class="meal-surah-heading">
+              <strong>{{ group.surahName }} Sûresi</strong>
+              <span>{{ group.verseCount }} âyet</span>
             </div>
-          </div>
-        </section>
 
-        <section class="book-page book-page-translation">
-          <div class="page-frame" aria-hidden="true" />
-          <div class="page-inner">
-            <header class="page-heading">
-              <p class="page-kicker">Anlam rehberi</p>
-              <h2>{{ pageTitleTurkish }}</h2>
-              <span>{{ translationPageMeta }}</span>
-            </header>
+            <button
+              v-for="segment in group.segments"
+              :id="`meal-segment-${group.surahId}-${segment.start}`"
+              :key="`${group.surahId}-${segment.start}-${segment.end}`"
+              type="button"
+              class="meal-segment"
+              :class="{ active: isMealSegmentActive(group.surahId, segment.start, segment.end) }"
+              :aria-pressed="isMealSegmentActive(group.surahId, segment.start, segment.end)"
+              @click="activateVerse(group.surahId, segment.visibleStart, 'meal')"
+            >
+              <b>{{ segment.start === segment.end ? segment.start : `${segment.start}–${segment.end}` }}.</b>
+              <span>{{ segment.text }}</span>
+            </button>
+          </section>
+        </div>
 
-            <div class="translation-flow">
-              <article
-                v-for="verse in pageVerses"
-                :key="`meal-${verse.surahId}-${verse.number}`"
-                class="translation-verse"
-              >
-                <b>{{ verse.number }}</b>
-                <p>{{ verse.translation }}</p>
-              </article>
-            </div>
-          </div>
-        </section>
-
-        <div class="page-turn-sheet" aria-hidden="true" />
-
-        <button
-          class="page-arrow page-arrow-left"
-          type="button"
-          :disabled="currentPage === 1"
-          aria-label="Önceki sayfa"
-          @click="previousPage"
-        >
-          <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="m15 18-6-6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </button>
-
-        <button
-          class="page-arrow page-arrow-right"
-          type="button"
-          :disabled="currentPage >= totalPages"
-          aria-label="Sonraki sayfa"
-          @click="nextPage"
-        >
-          <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="m9 18 6-6-6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </button>
+        <footer class="reader-panel-footer">Meal · {{ currentPage }}</footer>
       </article>
     </section>
+
+    <form class="reader-pagination" aria-label="Sayfa navigasyonu" @submit.prevent="goToInputPage">
+      <button type="button" :disabled="currentPage === 1" aria-label="Önceki sayfa" @click="previousPage">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="m15 18-6-6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+
+      <div class="reader-pagination-status">
+        <label for="reader-bottom-page">Sayfa</label>
+        <input
+          id="reader-bottom-page"
+          v-model="pageInput"
+          inputmode="numeric"
+          enterkeyhint="go"
+          aria-label="Gitmek istediğin sayfa"
+          @focus="selectInputText"
+          @change="goToInputPage"
+        >
+        <span>/</span>
+        <output>{{ totalPages }}</output>
+      </div>
+
+      <button type="button" :disabled="currentPage === totalPages" aria-label="Sonraki sayfa" @click="nextPage">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="m9 18 6-6-6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+    </form>
   </main>
 </template>
 
 <script setup lang="ts">
+import { quranPageIndex } from '~/data/quranPageIndex'
+import { quranYoluMeal } from '~/data/quranYoluMeal'
 import { surahs } from '~/data/surahs'
 
 definePageMeta({
@@ -110,784 +299,289 @@ definePageMeta({
 })
 
 type QuranVerse = {
-  page?: number
   surahId: number
   surahName: string
   arabicName: string
-  revelation: string
   verseCount: number
   number: number
   arabic: string
-  reading: string
-  translation: string
+}
+
+type ActiveVerse = {
+  surahId: number
+  ayah: number
 }
 
 const route = useRoute()
 const router = useRouter()
-const totalPages = 604
-const isTurning = ref(false)
-const turnDirection = ref<'next' | 'previous'>('next')
+const totalPages = quranPageIndex.length
+const readerView = ref<'spread' | 'arabic' | 'meal'>('spread')
+const mobilePanel = ref<'arabic' | 'meal'>('arabic')
+const readerFontScale = ref(1)
 const pageInput = ref('')
+const arabicPanelBody = ref<HTMLElement | null>(null)
+const mealPanelBody = ref<HTMLElement | null>(null)
+const activeVerse = ref<ActiveVerse | null>(null)
+const openPicker = ref<'surah' | 'ayah' | null>(null)
+const surahSearch = ref('')
 
-const allVerses = computed<QuranVerse[]>(() =>
-  surahs.flatMap((surah) =>
-    surah.verses.map((verse) => ({
-      page: undefined,
+const allVerses = new Map<string, QuranVerse>()
+for (const surah of surahs) {
+  for (const verse of surah.verses) {
+    allVerses.set(`${surah.id}:${verse.number}`, {
       surahId: surah.id,
       surahName: surah.name,
       arabicName: surah.arabicName,
-      revelation: surah.revelation,
       verseCount: surah.verseCount,
       number: verse.number,
-      arabic: verse.arabic,
-      reading: verse.reading,
-      translation: verse.translation
-    }))
-  )
-)
+      arabic: verse.arabic
+    })
+  }
+}
 
 const normalizePage = (value: unknown) => {
   const page = Number(value)
-
-  if (!Number.isFinite(page)) {
-    return 1
-  }
-
+  if (!Number.isFinite(page)) return 1
   return Math.min(Math.max(Math.trunc(page), 1), totalPages)
 }
 
 const currentPage = ref(normalizePage(route.query.sayfa))
 pageInput.value = String(currentPage.value)
 
-const pageVerses = computed(() => versesForPage(currentPage.value))
-
-const spreadSurahNames = computed(() => {
-  const names = [...new Set(pageVerses.value.map((verse) => verse.surahName))]
-  return names.length > 2 ? `${names[0]} - ${names[names.length - 1]}` : names.join(' - ')
-})
-
-const pageTitleArabic = computed(() => {
-  const names = [...new Set(pageVerses.value.map((verse) => verse.arabicName))]
-  return names.length > 1 ? `${names[0]} / ${names[names.length - 1]}` : names[0] || ''
-})
-
-const pageTitleTurkish = computed(() => {
-  const names = [...new Set(pageVerses.value.map((verse) => verse.surahName))]
-  return names.length > 1 ? `${names[0]} - ${names[names.length - 1]}` : names[0] || ''
-})
-
-const arabicFitStyle = computed(() => {
-  const verseCount = pageVerses.value.length
-  const characterCount = pageVerses.value.reduce((total, verse) => total + verse.arabic.length, 0)
-  const density = verseCount * 1.38 + characterCount / 175
-  const size = Math.max(30, Math.min(52, 53 - density))
-  const lineHeight = size < 34 ? 1.5 : size < 39 ? 1.58 : size < 44 ? 1.7 : 1.86
-
-  return {
-    '--arabic-size': `${size.toFixed(2)}px`,
-    '--arabic-line': String(lineHeight)
-  }
-})
-
-const arabicPageMeta = computed(() => {
-  const firstVerse = pageVerses.value[0]
-
-  if (!firstVerse) {
-    return `Arapça metin • Sayfa ${currentPage.value}`
-  }
-
-  return `${firstVerse.revelation} • ${firstVerse.verseCount} ayet • Arapça metin • Sayfa ${currentPage.value}`
-})
-
-const translationPageMeta = computed(() => {
-  const firstVerse = pageVerses.value[0]
-
-  if (!firstVerse) {
-    return `Türkçe meal • Sayfa ${currentPage.value}`
-  }
-
-  return `${firstVerse.revelation} • Türkçe meal • Sayfa ${currentPage.value}`
-})
-
 const versesForPage = (page: number) => {
-  const normalizedPage = normalizePage(page)
-  const totalVerses = allVerses.value.length
-  const start = Math.floor(((normalizedPage - 1) * totalVerses) / totalPages)
-  const end = Math.floor((normalizedPage * totalVerses) / totalPages)
+  const verses: QuranVerse[] = []
+  const ranges = quranPageIndex[normalizePage(page) - 1] ?? []
 
-  return allVerses.value.slice(start, Math.max(end, start + 1)).map((verse) => ({
-    ...verse,
-    page: normalizedPage
-  }))
+  for (const range of ranges) {
+    for (let ayah = range.a; ayah <= range.b; ayah += 1) {
+      const verse = allVerses.get(`${range.s}:${ayah}`)
+      if (verse) verses.push(verse)
+    }
+  }
+
+  return verses
 }
 
-let turnTimer: ReturnType<typeof setTimeout> | undefined
-let pageCommitTimer: ReturnType<typeof setTimeout> | undefined
+const pageVerses = computed(() => versesForPage(currentPage.value))
+const pageGroups = computed(() => {
+  const groups: Array<{
+    surahId: number
+    surahName: string
+    arabicName: string
+    verseCount: number
+    beginsHere: boolean
+    verses: QuranVerse[]
+  }> = []
 
-const playTurn = (direction: 'next' | 'previous') => {
-  isTurning.value = false
-  turnDirection.value = direction
-  window.clearTimeout(turnTimer)
+  for (const verse of pageVerses.value) {
+    const current = groups[groups.length - 1]
+    if (!current || current.surahId !== verse.surahId) {
+      groups.push({
+        surahId: verse.surahId,
+        surahName: verse.surahName,
+        arabicName: verse.arabicName,
+        verseCount: verse.verseCount,
+        beginsHere: verse.number === 1,
+        verses: [verse]
+      })
+    } else {
+      current.verses.push(verse)
+    }
+  }
 
-  requestAnimationFrame(() => {
-    isTurning.value = true
-    turnTimer = window.setTimeout(() => {
-      isTurning.value = false
-    }, 760)
+  return groups
+})
+
+const pageMealGroups = computed(() => pageGroups.value.map((group) => {
+  const firstVerse = group.verses[0]?.number ?? 0
+  const lastVerse = group.verses[group.verses.length - 1]?.number ?? 0
+
+  return {
+    ...group,
+    segments: (quranYoluMeal[group.surahId] ?? [])
+      .filter(segment => segment.end >= firstVerse && segment.start <= lastVerse)
+      .map(segment => ({
+        ...segment,
+        visibleStart: Math.max(segment.start, firstVerse),
+        visibleEnd: Math.min(segment.end, lastVerse)
+      }))
+  }
+}))
+
+const activeMealRange = computed(() => {
+  if (!activeVerse.value) return null
+  const group = pageMealGroups.value.find(item => item.surahId === activeVerse.value?.surahId)
+  const segment = group?.segments.find(
+    item => activeVerse.value && item.start <= activeVerse.value.ayah && item.end >= activeVerse.value.ayah
+  )
+
+  return segment ? { surahId: group?.surahId ?? 0, start: segment.start, end: segment.end } : null
+})
+
+const pageTitleArabic = computed(() => [...new Set(pageVerses.value.map(verse => verse.arabicName))].join(' / '))
+const pageTitleTurkish = computed(() => [...new Set(pageVerses.value.map(verse => verse.surahName))].join(' / '))
+const activeSurahVerseCount = computed(() => {
+  const surahId = activeVerse.value?.surahId ?? pageVerses.value[0]?.surahId ?? 1
+  return surahs.find(surah => surah.id === surahId)?.verseCount ?? 1
+})
+const currentSurah = computed(() => {
+  const surahId = activeVerse.value?.surahId ?? pageVerses.value[0]?.surahId ?? 1
+  return surahs.find(surah => surah.id === surahId) ?? surahs[0]
+})
+const currentAyah = computed(() => activeVerse.value?.ayah ?? pageVerses.value[0]?.number ?? 1)
+const filteredSurahs = computed(() => {
+  const query = surahSearch.value
+    .trim()
+    .toLocaleLowerCase('tr-TR')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+
+  if (!query) return surahs
+
+  return surahs.filter((surah) => {
+    const name = surah.name
+      .toLocaleLowerCase('tr-TR')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+    return String(surah.id).includes(query) || name.includes(query) || surah.arabicName.includes(query)
+  })
+})
+
+const readerStyle = computed(() => ({
+  '--reader-arabic-size': `${25 * readerFontScale.value}px`,
+  '--reader-arabic-line': `${58 * readerFontScale.value}px`,
+  '--reader-mobile-arabic-size': `${27 * readerFontScale.value}px`,
+  '--reader-mobile-arabic-line': `${62 * readerFontScale.value}px`,
+  '--reader-meal-size': `${15 * readerFontScale.value}px`,
+  '--reader-mobile-meal-size': `${16 * readerFontScale.value}px`,
+  '--reader-opening-title-size': `${26.4 * readerFontScale.value}px`,
+  '--reader-opening-text-size': `${20.48 * readerFontScale.value}px`
+}))
+
+const isArabicVerseActive = (surahId: number, ayah: number) => {
+  const range = activeMealRange.value
+  if (range) return range.surahId === surahId && ayah >= range.start && ayah <= range.end
+  return activeVerse.value?.surahId === surahId && activeVerse.value.ayah === ayah
+}
+
+const isMealSegmentActive = (surahId: number, start: number, end: number) => {
+  return activeVerse.value?.surahId === surahId
+    && activeVerse.value.ayah >= start
+    && activeVerse.value.ayah <= end
+}
+
+const scrollWithinPanel = (element: HTMLElement | null, selector: string) => {
+  element?.querySelector<HTMLElement>(selector)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+}
+
+const activateVerse = async (surahId: number, ayah: number, source: 'arabic' | 'meal') => {
+  activeVerse.value = { surahId, ayah }
+  await nextTick()
+
+  if (source === 'arabic') {
+    const segment = activeMealRange.value
+    if (segment) scrollWithinPanel(mealPanelBody.value, `#meal-segment-${surahId}-${segment.start}`)
+  } else {
+    scrollWithinPanel(arabicPanelBody.value, `#arabic-verse-${surahId}-${ayah}`)
+  }
+}
+
+const findPageForVerse = (surahId: number, ayah: number) => {
+  const pageIndex = quranPageIndex.findIndex(ranges => ranges.some(
+    range => range.s === surahId && ayah >= range.a && ayah <= range.b
+  ))
+  return pageIndex >= 0 ? pageIndex + 1 : 1
+}
+
+const commitPage = (page: number, preferredVerse?: ActiveVerse) => {
+  const normalized = normalizePage(page)
+  currentPage.value = normalized
+  pageInput.value = String(normalized)
+  const firstVerse = versesForPage(normalized)[0]
+  activeVerse.value = preferredVerse ?? (firstVerse ? { surahId: firstVerse.surahId, ayah: firstVerse.number } : null)
+  openPicker.value = null
+  arabicPanelBody.value?.scrollTo({ top: 0 })
+  mealPanelBody.value?.scrollTo({ top: 0 })
+
+  void router.replace({
+    query: { ...route.query, sayfa: String(normalized) }
   })
 }
 
-const setPage = (page: number) => {
-  const normalizedPage = normalizePage(page)
-
-  if (normalizedPage === currentPage.value) {
-    pageInput.value = String(currentPage.value)
-    return
-  }
-
-  const direction = normalizedPage > currentPage.value ? 'next' : 'previous'
-
-  playTurn(direction)
-  pageInput.value = String(normalizedPage)
-  window.clearTimeout(pageCommitTimer)
-  pageCommitTimer = window.setTimeout(() => {
-    currentPage.value = normalizedPage
-  }, 330)
+const selectSurah = (surahId: number) => {
+  const ayah = 1
+  commitPage(findPageForVerse(surahId, ayah), { surahId, ayah })
+  surahSearch.value = ''
 }
 
-const previousPage = () => {
-  setPage(currentPage.value - 1)
+const selectAyah = (ayah: number) => {
+  const surahId = activeVerse.value?.surahId ?? 1
+  commitPage(findPageForVerse(surahId, ayah), { surahId, ayah })
 }
 
-const nextPage = () => {
-  setPage(currentPage.value + 1)
+const togglePicker = (picker: 'surah' | 'ayah') => {
+  openPicker.value = openPicker.value === picker ? null : picker
+  if (picker !== 'surah') surahSearch.value = ''
 }
 
-const goToInputPage = () => {
-  setPage(normalizePage(pageInput.value))
+const selectReaderView = (view: 'spread' | 'arabic' | 'meal') => {
+  readerView.value = view
+  if (view !== 'spread') mobilePanel.value = view
+  if (import.meta.client) localStorage.setItem('al-ilm-quran-view', view)
 }
+
+const goToInputPage = () => commitPage(normalizePage(pageInput.value))
+const previousPage = () => commitPage(currentPage.value - 1)
+const nextPage = () => commitPage(currentPage.value + 1)
+
+const selectInputText = (event: FocusEvent) => {
+  (event.target as HTMLInputElement).select()
+}
+
+const changeFontScale = (change: number) => {
+  readerFontScale.value = Math.min(1.2, Math.max(0.9, Number((readerFontScale.value + change).toFixed(1))))
+}
+
+const toArabicNumber = (value: number) => String(value).replace(/\d/g, digit => '٠١٢٣٤٥٦٧٨٩'[Number(digit)] ?? digit)
 
 const handleKeydown = (event: KeyboardEvent) => {
-  if (event.key === 'ArrowLeft') {
-    previousPage()
-  }
-
-  if (event.key === 'ArrowRight') {
-    nextPage()
-  }
-}
-
-watch(
-  () => route.query.sayfa,
-  (page) => {
-    const normalizedPage = normalizePage(page)
-
-    if (normalizedPage !== currentPage.value) {
-      currentPage.value = normalizedPage
-      pageInput.value = String(normalizedPage)
-    }
-  }
-)
-
-watch(currentPage, async (page) => {
-  if (normalizePage(route.query.sayfa) === page) {
+  if (event.key === 'Escape' && openPicker.value) {
+    openPicker.value = null
     return
   }
 
-  await router.replace({ query: { ...route.query, sayfa: page } })
+  const target = event.target as HTMLElement | null
+  if (target?.matches('input, textarea, button')) return
+  if (event.key === 'ArrowLeft') previousPage()
+  if (event.key === 'ArrowRight') nextPage()
+}
+
+const handleOutsidePicker = (event: PointerEvent) => {
+  const target = event.target
+  if (target instanceof Element && !target.closest('[data-reader-picker]')) openPicker.value = null
+}
+
+watch(() => route.query.sayfa, (value) => {
+  const page = normalizePage(value)
+  if (page !== currentPage.value) commitPage(page)
 })
 
 onMounted(() => {
+  const savedView = localStorage.getItem('al-ilm-quran-view')
+  if (savedView === 'spread' || savedView === 'arabic' || savedView === 'meal') selectReaderView(savedView)
+  const firstVerse = pageVerses.value[0]
+  if (firstVerse) activeVerse.value = { surahId: firstVerse.surahId, ayah: firstVerse.number }
   window.addEventListener('keydown', handleKeydown)
+  document.addEventListener('pointerdown', handleOutsidePicker)
 })
 
 onBeforeUnmount(() => {
-  window.clearTimeout(turnTimer)
-  window.clearTimeout(pageCommitTimer)
   window.removeEventListener('keydown', handleKeydown)
+  document.removeEventListener('pointerdown', handleOutsidePicker)
 })
 
 useSeoMeta({
   title: "Kur'an Oku",
-  description: "Kur'an-ı Kerim'i Arapça metin ve Türkçe meal olarak iki sayfalı mushaf düzeninde oku."
+  description: "Kur'an-ı Kerim'i Arapça metin ve Kur'an Yolu mealiyle, eşleşen ayet vurgusuyla oku."
 })
 </script>
-
-<style scoped>
-.quran-reader {
-  --font-ui: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-arabic-quran: "KFGQPC Uthmanic Script HAFS", "KFGQPC Uthmanic Script", "Uthmanic Hafs", "Amiri Quran", Amiri, "Scheherazade New", serif;
-  --font-meal: "Source Serif 4", Georgia, "Times New Roman", serif;
-  min-height: 100vh;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 18% 12%, rgba(149, 211, 186, 0.26), transparent 30%),
-    radial-gradient(circle at 82% 8%, rgba(233, 195, 73, 0.18), transparent 28%),
-    linear-gradient(180deg, #fcf9f8 0%, #f6f3f2 100%);
-  color: #1c1b1b;
-  font-family: var(--font-ui);
-}
-
-.reader-header {
-  display: grid;
-  height: 60px;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  gap: 1rem;
-  border-bottom: 1px solid rgba(191, 201, 195, 0.7);
-  background: rgba(252, 249, 248, 0.86);
-  padding: 0 clamp(1rem, 4vw, 2.5rem);
-  backdrop-filter: blur(18px);
-}
-
-.back-link {
-  display: inline-flex;
-  width: fit-content;
-  align-items: center;
-  gap: 0.45rem;
-  border-radius: 999px;
-  color: #0b513d;
-  font-size: 0.84rem;
-  font-weight: 800;
-  transition: background 160ms ease, color 160ms ease;
-}
-
-.back-link:hover {
-  color: #003527;
-}
-
-.reader-title {
-  display: block;
-  min-width: 0;
-  text-align: center;
-}
-
-.reader-title > div {
-  min-width: 0;
-}
-
-.reader-title p {
-  margin: 0;
-  line-height: 1;
-  color: #003527;
-  font-family: var(--font-ui);
-  font-size: 1rem;
-  font-weight: 900;
-}
-
-.reader-title span {
-  display: block;
-  max-width: 22rem;
-  overflow: hidden;
-  color: rgba(64, 73, 68, 0.72);
-  font-size: 0.72rem;
-  font-weight: 700;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.reader-header-end {
-  min-width: 1px;
-}
-
-.page-jump {
-  justify-self: end;
-  display: inline-flex;
-  height: 40px;
-  align-items: center;
-  gap: 0.55rem;
-  border: 1px solid rgba(112, 121, 116, 0.18);
-  border-radius: 999px;
-  background: #ffffff;
-  padding: 0 0.75rem;
-  box-shadow: 0 10px 24px rgba(47, 46, 38, 0.08);
-}
-
-.stage-page-jump {
-  position: absolute;
-  right: auto;
-  bottom: clamp(0.55rem, 1vw, 0.9rem);
-  left: 50%;
-  z-index: 70;
-  height: 40px;
-  justify-self: auto;
-  border-color: rgba(115, 92, 0, 0.18);
-  background:
-    linear-gradient(180deg, rgba(255, 253, 246, 0.98), rgba(248, 244, 232, 0.94));
-  box-shadow: 0 16px 34px rgba(47, 46, 38, 0.11), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  transform: translateX(-50%);
-}
-
-.page-jump label,
-.page-jump span {
-  color: rgba(64, 73, 68, 0.72);
-  font-size: 0.66rem;
-  font-weight: 900;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  font-family: var(--font-ui);
-}
-
-.page-jump input {
-  width: 4rem;
-  height: 28px;
-  border: 1px solid rgba(0, 53, 39, 0.16);
-  border-radius: 999px;
-  background: #f8f4e8;
-  color: #003527;
-  text-align: center;
-  font-weight: 900;
-  outline: none;
-}
-
-.page-jump input:focus {
-  border-color: #2b6954;
-  box-shadow: 0 0 0 3px rgba(149, 211, 186, 0.32);
-}
-
-.reader-stage {
-  position: relative;
-  display: flex;
-  height: calc(100vh - 60px);
-  align-items: center;
-  justify-content: center;
-  padding: clamp(0.25rem, 0.7vw, 0.65rem) clamp(0.25rem, 0.8vw, 0.75rem);
-}
-
-.book-shell {
-  position: relative;
-  display: grid;
-  width: min(100%, 1900px);
-  height: min(100%, 920px);
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  overflow: hidden;
-  border: 1px solid rgba(112, 121, 116, 0.22);
-  border-radius: 18px;
-  background: #f8f4e8;
-  box-shadow:
-    0 36px 70px rgba(47, 46, 38, 0.14),
-    0 10px 28px rgba(47, 46, 38, 0.08);
-  perspective: 1800px;
-}
-
-.book-shell::before {
-  content: '';
-  position: absolute;
-  inset: 0 calc(50% - 13px) 0 calc(50% - 13px);
-  z-index: 5;
-  background:
-    linear-gradient(90deg, rgba(115, 92, 0, 0.14), rgba(255, 255, 255, 0.65), rgba(0, 53, 39, 0.09));
-  box-shadow: 0 0 22px rgba(47, 46, 38, 0.16);
-  pointer-events: none;
-}
-
-.book-page {
-  position: relative;
-  min-width: 0;
-  overflow: hidden;
-  background-color: #fffdf6;
-  background-image:
-    radial-gradient(circle at 18% 20%, rgba(233, 195, 73, 0.12), transparent 24%),
-    radial-gradient(circle at 84% 70%, rgba(149, 211, 186, 0.16), transparent 25%),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.3), transparent 18%, transparent 82%, rgba(115, 92, 0, 0.08));
-  padding: clamp(2.3rem, 3vw, 3.8rem) clamp(2.4rem, 3.2vw, 4.15rem) clamp(4.8rem, 5vw, 5.4rem);
-}
-
-.book-page-arabic {
-  border-right: 1px solid rgba(112, 121, 116, 0.18);
-}
-
-.page-frame {
-  position: absolute;
-  inset: clamp(0.8rem, 1.4vw, 1.3rem);
-  border: 3px double rgba(115, 92, 0, 0.5);
-  outline: 1px solid rgba(115, 92, 0, 0.2);
-  outline-offset: -9px;
-  pointer-events: none;
-}
-
-.page-inner {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  height: 100%;
-  min-height: 0;
-  flex-direction: column;
-  gap: clamp(0.85rem, 1.45vh, 1.2rem);
-}
-
-.page-heading {
-  flex: none;
-  text-align: center;
-}
-
-.page-heading h1,
-.page-heading h2 {
-  margin: 0.2rem 0 0.45rem;
-  color: #003527;
-  font-family: var(--font-arabic-quran);
-  font-size: clamp(1.9rem, 3vw, 2.8rem);
-  font-weight: 700;
-  line-height: 1.12;
-}
-
-.page-heading h2 {
-  font-family: var(--font-ui);
-  font-size: clamp(1.45rem, 2vw, 2rem);
-  line-height: 1.22;
-}
-
-.page-kicker,
-.page-heading span {
-  margin: 0;
-  color: rgba(115, 92, 0, 0.74);
-  font-size: 0.66rem;
-  font-weight: 900;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.arabic-flow {
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
-  padding: 0.1rem 0.4rem 1.35rem 0;
-  color: #111816;
-  font-family: var(--font-arabic-quran);
-  font-size: var(--arabic-size);
-  font-weight: 400;
-  line-height: var(--arabic-line);
-  text-align: right;
-  text-rendering: optimizeLegibility;
-}
-
-.arabic-flow span {
-  display: inline;
-  letter-spacing: 0;
-  word-spacing: 0.02em;
-}
-
-.arabic-flow sup {
-  display: inline-flex;
-  width: max(1.25rem, calc(var(--arabic-size) * 0.48));
-  height: max(1.25rem, calc(var(--arabic-size) * 0.48));
-  align-items: center;
-  justify-content: center;
-  margin-inline: 0.3rem;
-  border: 1px solid rgba(115, 92, 0, 0.62);
-  border-radius: 999px;
-  color: #735c00;
-  font-size: max(0.58rem, calc(var(--arabic-size) * 0.2));
-  line-height: 1;
-  vertical-align: middle;
-}
-
-.book-page-number {
-  position: absolute;
-  bottom: clamp(4.15rem, 5.1vw, 4.85rem);
-  z-index: 4;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.42rem 0.7rem;
-  border: 1px solid rgba(115, 92, 0, 0.14);
-  border-radius: 999px;
-  background: rgba(255, 253, 246, 0.88);
-  color: rgba(115, 92, 0, 0.72);
-  font-family: var(--font-ui);
-  font-size: 0.64rem;
-  font-weight: 900;
-  letter-spacing: 0.16em;
-  line-height: 1;
-  box-shadow: 0 10px 22px rgba(47, 46, 38, 0.08);
-  text-transform: uppercase;
-  backdrop-filter: blur(10px);
-}
-
-.book-page-number-left {
-  left: clamp(2.35rem, 3.8vw, 4.7rem);
-}
-
-.book-page-number-right {
-  right: clamp(2.35rem, 3.8vw, 4.7rem);
-}
-
-.translation-flow {
-  flex: 1;
-  display: grid;
-  align-content: start;
-  gap: clamp(0.58rem, 1vh, 0.85rem);
-  min-height: 0;
-  overflow-y: auto;
-  padding: 0.15rem 0.45rem 1rem 0;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(43, 105, 84, 0.22) transparent;
-}
-
-.translation-verse {
-  display: grid;
-  grid-template-columns: 2rem minmax(0, 1fr);
-  gap: 0.85rem;
-  align-items: start;
-}
-
-.translation-verse b {
-  display: inline-flex;
-  width: 2rem;
-  height: 2rem;
-  align-items: center;
-  justify-content: center;
-  border-radius: 999px;
-  background: #b0f0d6;
-  color: #003527;
-  font-size: 0.78rem;
-  font-weight: 900;
-}
-
-.translation-verse p {
-  margin: 0;
-  color: rgba(28, 27, 27, 0.82);
-  font-family: var(--font-meal);
-  font-size: clamp(0.9rem, 0.95vw, 1.04rem);
-  font-weight: 650;
-  line-height: 1.5;
-}
-
-.page-arrow {
-  position: absolute;
-  bottom: 1rem;
-  z-index: 55;
-  display: inline-flex;
-  width: 48px;
-  height: 48px;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid rgba(112, 121, 116, 0.18);
-  border-radius: 999px;
-  background: #ffffff;
-  color: #003527;
-  box-shadow: 0 14px 32px rgba(47, 46, 38, 0.14);
-  transition: transform 160ms ease, background 160ms ease, color 160ms ease;
-}
-
-.page-arrow:hover {
-  transform: translateY(-1px) scale(1.04);
-  background: #003527;
-  color: #ffffff;
-}
-
-.page-arrow:disabled {
-  cursor: not-allowed;
-  opacity: 0.35;
-}
-
-.page-arrow-left {
-  left: clamp(1rem, 1.6vw, 1.7rem);
-}
-
-.page-arrow-right {
-  right: clamp(1rem, 1.6vw, 1.7rem);
-}
-
-.page-turn-sheet {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  z-index: 35;
-  display: none;
-  width: 50%;
-  background:
-    radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.72), transparent 38%),
-    linear-gradient(90deg, rgba(47, 46, 38, 0.18), rgba(255, 255, 255, 0.82) 22%, rgba(255, 255, 255, 0.98) 54%, rgba(115, 92, 0, 0.14)),
-    #fffdf6;
-  border: 1px solid rgba(115, 92, 0, 0.16);
-  box-shadow: 0 18px 44px rgba(47, 46, 38, 0.16);
-  pointer-events: none;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
-}
-
-.page-turn-sheet::before {
-  content: '';
-  position: absolute;
-  inset: clamp(0.8rem, 1.4vw, 1.3rem);
-  border: 3px double rgba(115, 92, 0, 0.34);
-  outline: 1px solid rgba(115, 92, 0, 0.14);
-  outline-offset: -9px;
-}
-
-.page-turn-sheet::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(90deg, rgba(47, 46, 38, 0.22), transparent 20%, transparent 78%, rgba(255, 255, 255, 0.7)),
-    repeating-linear-gradient(0deg, transparent 0 24px, rgba(115, 92, 0, 0.035) 25px 26px);
-  opacity: 0;
-}
-
-.is-turning .page-turn-sheet {
-  display: block;
-}
-
-.is-turning .page-turn-sheet::after {
-  animation: sheet-shade 760ms ease both;
-}
-
-.turning-next .page-turn-sheet {
-  left: 50%;
-  transform-origin: left center;
-}
-
-.turning-previous .page-turn-sheet {
-  right: 50%;
-  transform-origin: right center;
-}
-
-.is-turning.turning-next .page-turn-sheet {
-  animation: flip-next 760ms cubic-bezier(0.2, 0.76, 0.16, 1) both;
-}
-
-.is-turning.turning-previous .page-turn-sheet {
-  animation: flip-previous 760ms cubic-bezier(0.2, 0.76, 0.16, 1) both;
-}
-
-.is-turning .book-page {
-  animation: page-ink-settle 420ms ease both;
-}
-
-@keyframes flip-next {
-  0% {
-    opacity: 0;
-    transform: rotateY(0deg) translateZ(0);
-  }
-  10% {
-    opacity: 1;
-  }
-  44% {
-    opacity: 1;
-    transform: rotateY(-78deg) translateZ(20px);
-    box-shadow: -32px 22px 44px rgba(47, 46, 38, 0.22);
-  }
-  78% {
-    opacity: 0.88;
-    transform: rotateY(-154deg) translateZ(8px);
-  }
-  100% {
-    opacity: 0;
-    transform: rotateY(-178deg) translateZ(0);
-  }
-}
-
-@keyframes flip-previous {
-  0% {
-    opacity: 0;
-    transform: rotateY(0deg) translateZ(0);
-  }
-  10% {
-    opacity: 1;
-  }
-  44% {
-    opacity: 1;
-    transform: rotateY(78deg) translateZ(20px);
-    box-shadow: 32px 22px 44px rgba(47, 46, 38, 0.22);
-  }
-  78% {
-    opacity: 0.88;
-    transform: rotateY(154deg) translateZ(8px);
-  }
-  100% {
-    opacity: 0;
-    transform: rotateY(178deg) translateZ(0);
-  }
-}
-
-@keyframes page-ink-settle {
-  0% {
-    filter: saturate(0.96);
-  }
-  100% {
-    filter: saturate(1);
-    opacity: 1;
-  }
-}
-
-@keyframes sheet-shade {
-  0%,
-  100% {
-    opacity: 0;
-  }
-  42% {
-    opacity: 0.75;
-  }
-}
-
-@media (max-width: 1023px) {
-  .quran-reader {
-    overflow: auto;
-  }
-
-  .reader-header {
-    height: auto;
-    min-height: 60px;
-    grid-template-columns: 1fr;
-    justify-items: center;
-    padding-block: 0.8rem;
-  }
-
-  .back-link,
-  .page-jump {
-    justify-self: center;
-  }
-
-  .reader-stage {
-    height: auto;
-    min-height: calc(100vh - 60px);
-    padding: 1rem;
-  }
-
-  .book-shell {
-    height: auto;
-    min-height: 78vh;
-    grid-template-columns: 1fr;
-  }
-
-  .stage-page-jump {
-    bottom: 0.7rem;
-    left: 50%;
-  }
-
-  .book-shell::before {
-    display: none;
-  }
-
-  .book-page {
-    min-height: 64vh;
-    padding-bottom: 5rem;
-  }
-
-  .book-page-arabic {
-    border-right: 0;
-    border-bottom: 1px solid rgba(112, 121, 116, 0.18);
-  }
-
-  .arabic-flow,
-  .translation-flow {
-    overflow: visible;
-  }
-
-  .page-arrow {
-    top: auto;
-    bottom: 1.35rem;
-    transform: none;
-  }
-
-  .page-arrow:hover {
-    transform: translateY(-1px);
-  }
-
-  .book-page-number {
-    bottom: 4.4rem;
-  }
-}
-</style>

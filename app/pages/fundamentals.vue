@@ -1,41 +1,44 @@
 <template>
-  <main class="farz-page">
-    <header class="farz-header">
-      <nav class="farz-container farz-nav" aria-label="32 Farz rehberi">
-        <NuxtLink to="/" class="farz-brand">
-          <span class="farz-brand-mark">ع</span>
+  <main class="min-h-screen overflow-x-hidden bg-[#f8f9ff] font-sans text-[#121c2a]">
+    <header class="sticky top-0 z-[70] border-b border-[#bfc9c3]/65 bg-[#f8f9ff]/90 backdrop-blur-2xl">
+      <nav class="mx-auto grid min-h-16 w-[min(calc(100%_-_2rem),1200px)] grid-cols-[180px_1fr_120px] items-center gap-6 max-[980px]:grid-cols-[1fr_auto] max-sm:min-h-[60px] max-sm:w-[min(calc(100%_-_1.75rem),1200px)]" aria-label="32 Farz rehberi">
+        <NuxtLink to="/" class="inline-flex items-center gap-2.5 font-display text-[22px] font-bold text-[#003527] no-underline">
+          <span class="grid size-[34px] place-items-center rounded-full border border-[#003527]/15 bg-white text-lg">ع</span>
           <span>Al-Ilm</span>
         </NuxtLink>
 
-        <div class="farz-nav-links">
+        <div class="flex justify-center gap-8 max-[980px]:hidden">
           <a
             v-for="link in quickLinks"
             :key="link.href"
             :href="link.href"
-            :class="['farz-nav-link', { 'is-active': activeSection === link.id }]"
+            :class="[
+              'border-b-2 px-0 pb-[18px] pt-[22px] text-sm font-semibold text-[#404944] no-underline transition-colors hover:border-[#735c00] hover:text-[#003527]',
+              activeSection === link.id ? 'border-[#735c00] text-[#003527]' : 'border-transparent'
+            ]"
           >
             {{ link.label }}
           </a>
         </div>
 
-        <NuxtLink to="/" class="farz-home-link">Ana sayfa</NuxtLink>
+        <NuxtLink to="/" class="justify-self-end rounded-full border border-[#003527]/15 px-[15px] py-[9px] text-[13px] font-bold text-[#003527] no-underline max-sm:hidden">Ana sayfa</NuxtLink>
       </nav>
     </header>
 
-    <section class="farz-hero">
-      <div class="farz-hero-glow farz-hero-glow-left" aria-hidden="true" />
-      <div class="farz-hero-glow farz-hero-glow-right" aria-hidden="true" />
+    <section class="relative grid min-h-[calc(100vh_-_64px)] place-items-center overflow-hidden border-b border-[#bfc9c3]/40 bg-[#f8f9ff] [background-image:radial-gradient(circle_at_2px_2px,rgba(0,53,39,0.045)_1px,transparent_0),radial-gradient(circle_at_12%_26%,rgba(6,78,59,0.08),transparent_24%),radial-gradient(circle_at_88%_78%,rgba(115,92,0,0.08),transparent_24%)] [background-size:32px_32px,auto,auto] max-sm:min-h-[640px]">
+      <div class="absolute bottom-[18%] left-[-120px] size-[360px] rounded-full bg-[#003527]/15 opacity-[0.35] blur-[48px]" aria-hidden="true" />
+      <div class="absolute right-[-120px] top-[18%] size-[360px] rounded-full bg-[#735c00]/15 opacity-[0.35] blur-[48px]" aria-hidden="true" />
 
-      <div class="farz-container farz-hero-inner">
-        <p class="farz-eyebrow">Temel Bilgiler</p>
-        <h1>32 Farz</h1>
-        <p class="farz-hero-copy">
+      <div class="relative z-[1] mx-auto w-[min(calc(100%_-_2rem),1200px)] py-24 text-center max-sm:w-[min(calc(100%_-_1.75rem),1200px)] max-sm:py-[72px]">
+        <p class="m-0 inline-flex rounded-full border border-[#003527]/15 bg-white/70 px-[18px] py-[9px] text-xs font-extrabold uppercase tracking-[0.14em] text-[#003527]">Temel Bilgiler</p>
+        <h1 class="m-0 mt-[26px] font-display text-[clamp(58px,8vw,116px)] font-bold leading-[0.92] text-[#003527] max-sm:text-[58px]">32 Farz</h1>
+        <p class="mx-auto mb-0 mt-7 max-w-[720px] text-xl leading-[1.7] text-[#404944] max-sm:text-[17px]">
           İman, ibadet ve temizlikle ilgili temel farzları; anlamlarıyla birlikte sırayla
           öğren.
         </p>
 
-        <div class="farz-hero-actions">
-          <a href="#islam" class="farz-button farz-button-primary">
+        <div class="mt-11 flex justify-center gap-4 max-sm:flex-col">
+          <a href="#islam" class="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-[10px] bg-[#003527] px-[26px] text-sm font-extrabold text-white no-underline shadow-[0_16px_34px_rgba(0,53,39,0.16)] transition duration-200 hover:-translate-y-0.5">
             Farzları İncele
             <span aria-hidden="true">↓</span>
           </a>
@@ -43,131 +46,134 @@
       </div>
     </section>
 
-    <section id="islam" class="farz-section farz-section-tinted">
-      <div class="farz-container">
-        <div class="farz-section-heading farz-islam-heading">
+    <section id="islam" class="border-y border-[#bfc9c3]/35 bg-[#eff4ff] py-28 max-sm:py-[72px]">
+      <div class="mx-auto w-[min(calc(100%_-_2rem),1200px)] max-sm:w-[min(calc(100%_-_1.75rem),1200px)]">
+        <div class="mb-12 flex items-end justify-between gap-8 max-sm:flex-col max-sm:items-start">
           <div>
-            <p class="farz-kicker">Temel ibadetler</p>
-            <h2>İslam'ın Şartları</h2>
-            <p>Müslüman olmanın ve dini yaşamanın beş temel şartını, anlamlarıyla birlikte kavra.</p>
+            <p class="m-0 text-xs font-extrabold uppercase tracking-[0.14em] text-[#003527]">Temel ibadetler</p>
+            <h2 class="m-0 mt-2.5 font-display text-[clamp(34px,4vw,52px)] font-bold leading-[1.05] text-[#003527]">İslam'ın Şartları</h2>
+            <p class="mb-0 mt-4 max-w-[610px] text-base leading-[1.7] text-[#404944]">Müslüman olmanın ve dini yaşamanın beş temel şartını, anlamlarıyla birlikte kavra.</p>
           </div>
         </div>
 
-        <div class="farz-islam-picker" role="tablist" aria-label="İslam'ın şartları">
+        <div class="grid grid-cols-5 gap-3 max-[980px]:grid-cols-3 max-sm:grid-cols-1" role="tablist" aria-label="İslam'ın şartları">
           <button
             v-for="(item, index) in islamConditions"
             :key="item.id"
             type="button"
             role="tab"
             :aria-selected="selectedIslamConditionId === item.id"
-            :class="['farz-islam-picker-card', { 'is-active': selectedIslamConditionId === item.id }]"
+            :class="[
+              'flex min-h-[94px] items-center gap-3 rounded-[14px] border bg-white/70 p-4 text-left text-[#003527] transition duration-200 hover:-translate-y-0.5 hover:border-[#003527] hover:bg-[#fffef9]',
+              selectedIslamConditionId === item.id ? '-translate-y-0.5 border-[#003527] bg-[#fffef9]' : 'border-[#003527]/15'
+            ]"
             @click="selectedIslamConditionId = item.id"
           >
-            <span>{{ pad(index + 1) }}</span>
-            <strong>{{ item.title }}</strong>
+            <span class="grid size-[34px] shrink-0 place-items-center rounded-full bg-secondary-container text-xs font-black text-on-secondary-container">{{ pad(index + 1) }}</span>
+            <strong class="font-display text-lg leading-[1.1]">{{ item.title }}</strong>
           </button>
         </div>
 
-        <article class="farz-islam-detail">
+        <article class="mt-[18px] rounded-3xl border border-[#003527]/20 bg-[#fffef9] p-[34px] shadow-[0_16px_42px_rgba(0,53,39,0.06)] max-sm:p-6">
           <template v-if="selectedIslamConditionId === 'shahada'">
-            <div class="farz-shahada-topline">
-              <span>{{ pad(1) }}</span>
-              <p>İslam'a giriş ifadesi</p>
+            <div class="flex items-center gap-3">
+              <span class="grid size-[34px] shrink-0 place-items-center rounded-full bg-secondary-container text-xs font-black text-on-secondary-container">{{ pad(1) }}</span>
+              <p class="m-0 text-[11px] font-extrabold uppercase tracking-[0.12em] text-[#735c00]">İslam'a giriş ifadesi</p>
             </div>
-            <h3>{{ shahada.title }}</h3>
-            <p class="farz-shahada-description">{{ shahada.description }}</p>
+            <h3 class="m-0 mt-[26px] font-display text-[clamp(34px,4vw,48px)] font-bold leading-[1.05] text-[#003527]">{{ shahada.title }}</h3>
+            <p class="mb-0 mt-[14px] max-w-[590px] text-[15px] leading-[1.65] text-[#404944]">{{ shahada.description }}</p>
 
-            <div class="farz-shahada-text">
-              <p class="farz-shahada-label">Arapça metin</p>
-              <p class="farz-shahada-arabic" lang="ar" dir="rtl">{{ shahada.arabic }}</p>
+            <div class="mt-7 border-y border-[#003527]/10 py-5">
+              <p class="m-0 text-[11px] font-extrabold uppercase tracking-[0.12em] text-[#735c00]">Arapça metin</p>
+              <p class="mb-0 mt-[14px] text-right font-['Amiri_Quran',Amiri,serif] text-[clamp(28px,3vw,40px)] leading-[1.7] text-[#082c23]" lang="ar" dir="rtl">{{ shahada.arabic }}</p>
             </div>
 
-            <div class="farz-shahada-details">
-              <div>
-                <p>Okunuşu</p>
-                <strong>{{ shahada.latin }}</strong>
+            <div class="mt-[22px] grid gap-[18px]">
+              <div class="grid gap-[7px]">
+                <p class="m-0 text-[11px] font-extrabold uppercase tracking-[0.12em] text-[#735c00]">Okunuşu</p>
+                <strong class="text-sm font-medium leading-[1.65] text-[#24302a]">{{ shahada.latin }}</strong>
               </div>
-              <div>
-                <p>Türkçe anlamı</p>
-                <strong>{{ shahada.meaning }}</strong>
+              <div class="grid gap-[7px]">
+                <p class="m-0 text-[11px] font-extrabold uppercase tracking-[0.12em] text-[#735c00]">Türkçe anlamı</p>
+                <strong class="text-sm font-medium leading-[1.65] text-[#24302a]">{{ shahada.meaning }}</strong>
               </div>
             </div>
           </template>
 
           <template v-else>
-            <div class="farz-shahada-topline">
-              <span>{{ pad(selectedIslamConditionIndex + 1) }}</span>
-              <p>İslam'ın şartlarından biri</p>
+            <div class="flex items-center gap-3">
+              <span class="grid size-[34px] shrink-0 place-items-center rounded-full bg-secondary-container text-xs font-black text-on-secondary-container">{{ pad(selectedIslamConditionIndex + 1) }}</span>
+              <p class="m-0 text-[11px] font-extrabold uppercase tracking-[0.12em] text-[#735c00]">İslam'ın şartlarından biri</p>
             </div>
-            <h3>{{ selectedIslamCondition.title }}</h3>
-            <p class="farz-islam-detail-copy">{{ selectedIslamCondition.detail }}</p>
+            <h3 class="m-0 mt-[26px] font-display text-[clamp(34px,4vw,48px)] font-bold leading-[1.05] text-[#003527]">{{ selectedIslamCondition.title }}</h3>
+            <p class="mb-0 mt-[18px] max-w-[760px] text-[17px] leading-[1.75] text-[#404944]">{{ selectedIslamCondition.detail }}</p>
           </template>
         </article>
       </div>
     </section>
 
-    <section id="iman" class="farz-section">
-      <div class="farz-container">
-        <div class="farz-section-heading">
+    <section id="iman" class="py-28 max-sm:py-[72px]">
+      <div class="mx-auto w-[min(calc(100%_-_2rem),1200px)] max-sm:w-[min(calc(100%_-_1.75rem),1200px)]">
+        <div class="mb-12 flex items-end justify-between gap-8 max-sm:flex-col max-sm:items-start">
           <div>
-            <h2>İmanın Şartları</h2>
-            <p>İmanın temelini oluşturan ve her müminin kalpten inanması gereken altı ana rükün.</p>
+            <h2 class="m-0 font-display text-[clamp(34px,4vw,52px)] font-bold leading-[1.05] text-[#003527]">İmanın Şartları</h2>
+            <p class="mb-0 mt-4 max-w-[610px] text-base leading-[1.7] text-[#404944]">İmanın temelini oluşturan ve her müminin kalpten inanması gereken altı ana rükün.</p>
           </div>
         </div>
 
-        <div class="farz-card-grid">
-          <article v-for="(item, index) in faithConditions" :key="item.title" class="farz-card">
-            <div class="farz-card-icon" aria-hidden="true">{{ item.icon }}</div>
-            <span class="farz-card-number">{{ pad(index + 1) }}</span>
-            <h3>{{ item.title }}</h3>
-            <p>{{ item.description }}</p>
+        <div class="grid grid-cols-3 gap-7 max-[980px]:grid-cols-2 max-sm:grid-cols-1">
+          <article v-for="(item, index) in faithConditions" :key="item.title" class="min-h-[268px] rounded-[18px] border border-[#d7ded9] bg-white p-8 [background-image:radial-gradient(circle_at_88%_14%,rgba(0,53,39,0.06),transparent_32%)] transition duration-200 hover:-translate-y-1 hover:border-[#003527]/30 hover:shadow-[0_18px_44px_rgba(6,78,59,0.09)]">
+            <div class="grid size-[50px] place-items-center rounded-[14px] bg-[#003527]/[0.08] text-xl text-[#003527]" aria-hidden="true">{{ item.icon }}</div>
+            <span class="mt-6 block text-xs font-black tracking-[0.18em] text-[#735c00]">{{ pad(index + 1) }}</span>
+            <h3 class="m-0 mt-3 font-display text-[25px] leading-[1.18] text-[#121c2a]">{{ item.title }}</h3>
+            <p class="mb-0 mt-[14px] text-sm leading-[1.65] text-[#404944]">{{ item.description }}</p>
           </article>
         </div>
       </div>
     </section>
 
-    <section id="namaz" class="farz-section">
-      <div class="farz-container">
-        <div class="farz-centered-heading">
-          <p class="farz-kicker">Namaz rehberi</p>
-          <h2>Namazın Farzları</h2>
-          <p>Namaza başlamadan önce ve namaz içinde dikkat edilen on iki farz.</p>
+    <section id="namaz" class="py-28 max-sm:py-[72px]">
+      <div class="mx-auto w-[min(calc(100%_-_2rem),1200px)] max-sm:w-[min(calc(100%_-_1.75rem),1200px)]">
+        <div class="mx-auto mb-[54px] max-w-[760px] text-center">
+          <p class="m-0 text-xs font-extrabold uppercase tracking-[0.14em] text-[#003527]">Namaz rehberi</p>
+          <h2 class="m-0 mt-2.5 font-display text-[clamp(34px,4vw,52px)] font-bold leading-[1.05] text-[#003527]">Namazın Farzları</h2>
+          <p class="mx-auto mb-0 mt-4 max-w-[610px] text-base leading-[1.7] text-[#404944]">Namaza başlamadan önce ve namaz içinde dikkat edilen on iki farz.</p>
         </div>
 
-        <div class="farz-prayer-grid">
-          <article class="farz-list-panel">
-            <div class="farz-list-heading">
-              <span>1</span>
+        <div class="grid grid-cols-2 gap-8 max-[980px]:grid-cols-2 max-sm:grid-cols-1">
+          <article class="rounded-3xl border border-[#d7ded9] bg-white p-[34px] transition duration-200 hover:-translate-y-1 hover:border-[#003527]/30 hover:shadow-[0_18px_44px_rgba(6,78,59,0.09)]">
+            <div class="mb-7 flex items-center gap-[18px]">
+              <span class="grid size-[46px] shrink-0 place-items-center rounded-full bg-[#003527] font-black text-white">1</span>
               <div>
-                <h3>Dışındaki Farzlar</h3>
-                <p>Namaza başlamadan önce yerine getirilen şartlar.</p>
+                <h3 class="m-0 font-display text-[27px] leading-[1.15]">Dışındaki Farzlar</h3>
+                <p class="mb-0 mt-1.5 text-sm text-[#404944]">Namaza başlamadan önce yerine getirilen şartlar.</p>
               </div>
             </div>
-            <ol>
-              <li v-for="(item, index) in prayerOuterFards" :key="item.title">
-                <span>{{ pad(index + 1) }}</span>
+            <ol class="m-0 grid list-none gap-3 p-0">
+              <li v-for="(item, index) in prayerOuterFards" :key="item.title" class="flex items-start gap-[14px] rounded-xl border border-[#bfc9c3]/65 bg-[#f8f9ff] px-4 py-[14px] font-bold text-[#121c2a]">
+                <span class="grid size-[34px] shrink-0 place-items-center rounded-[10px] bg-[#003527]/[0.08] text-xs font-black text-[#003527]">{{ pad(index + 1) }}</span>
                 <div>
-                  <strong>{{ item.title }}</strong>
-                  <p>{{ item.description }}</p>
+                  <strong class="block text-[15px] text-[#121c2a]">{{ item.title }}</strong>
+                  <p class="mb-0 mt-1.5 text-[13px] font-normal leading-[1.55] text-[#404944]">{{ item.description }}</p>
                 </div>
               </li>
             </ol>
           </article>
 
-          <article class="farz-list-panel farz-list-panel-gold">
-            <div class="farz-list-heading">
-              <span>2</span>
+          <article class="rounded-3xl border border-[#d7ded9] bg-white p-[34px] transition duration-200 hover:-translate-y-1 hover:border-[#003527]/30 hover:shadow-[0_18px_44px_rgba(6,78,59,0.09)]">
+            <div class="mb-7 flex items-center gap-[18px]">
+              <span class="grid size-[46px] shrink-0 place-items-center rounded-full bg-[#735c00] font-black text-white">2</span>
               <div>
-                <h3>İçindeki Farzlar</h3>
-                <p>Namaz esnasında yapılan rükünler.</p>
+                <h3 class="m-0 font-display text-[27px] leading-[1.15]">İçindeki Farzlar</h3>
+                <p class="mb-0 mt-1.5 text-sm text-[#404944]">Namaz esnasında yapılan rükünler.</p>
               </div>
             </div>
-            <ol>
-              <li v-for="(item, index) in prayerInnerFards" :key="item.title">
-                <span>{{ pad(index + 1) }}</span>
+            <ol class="m-0 grid list-none gap-3 p-0">
+              <li v-for="(item, index) in prayerInnerFards" :key="item.title" class="flex items-start gap-[14px] rounded-xl border border-[#bfc9c3]/65 bg-[#f8f9ff] px-4 py-[14px] font-bold text-[#121c2a]">
+                <span class="grid size-[34px] shrink-0 place-items-center rounded-[10px] bg-[#735c00]/10 text-xs font-black text-[#735c00]">{{ pad(index + 1) }}</span>
                 <div>
-                  <strong>{{ item.title }}</strong>
-                  <p>{{ item.description }}</p>
+                  <strong class="block text-[15px] text-[#121c2a]">{{ item.title }}</strong>
+                  <p class="mb-0 mt-1.5 text-[13px] font-normal leading-[1.55] text-[#404944]">{{ item.description }}</p>
                 </div>
               </li>
             </ol>
@@ -176,56 +182,56 @@
       </div>
     </section>
 
-    <section id="abdest" class="farz-section farz-section-white">
-      <div class="farz-container">
-        <div class="farz-centered-heading">
-          <p class="farz-kicker">Arınma</p>
-          <h2>Abdestin Farzları</h2>
-          <p>Namaza hazırlığın anahtarı olan dört temel adım.</p>
+    <section id="abdest" class="bg-white py-28 max-sm:py-[72px]">
+      <div class="mx-auto w-[min(calc(100%_-_2rem),1200px)] max-sm:w-[min(calc(100%_-_1.75rem),1200px)]">
+        <div class="mx-auto mb-[54px] max-w-[760px] text-center">
+          <p class="m-0 text-xs font-extrabold uppercase tracking-[0.14em] text-[#003527]">Arınma</p>
+          <h2 class="m-0 mt-2.5 font-display text-[clamp(34px,4vw,52px)] font-bold leading-[1.05] text-[#003527]">Abdestin Farzları</h2>
+          <p class="mx-auto mb-0 mt-4 max-w-[610px] text-base leading-[1.7] text-[#404944]">Namaza hazırlığın anahtarı olan dört temel adım.</p>
         </div>
 
-        <div class="farz-abdest-grid">
-          <article v-for="(item, index) in ablutionFards" :key="item.title" class="farz-abdest-card">
-            <div class="farz-abdest-image">
-              <img :src="item.image" :alt="item.alt">
+        <div class="grid grid-cols-4 gap-6 max-[980px]:grid-cols-2 max-sm:grid-cols-1">
+          <article v-for="(item, index) in ablutionFards" :key="item.title" class="group overflow-hidden rounded-[22px] border border-[#d7ded9] bg-white transition duration-200 hover:-translate-y-1 hover:border-[#003527]/30 hover:shadow-[0_18px_44px_rgba(6,78,59,0.09)]">
+            <div class="h-[178px] overflow-hidden bg-[#003527]/[0.08]">
+              <img class="size-full object-cover transition-transform duration-300 group-hover:scale-105" :src="item.image" :alt="item.alt">
             </div>
-            <div class="farz-abdest-body">
-              <span>{{ index + 1 }}</span>
-              <h3>{{ item.title }}</h3>
-              <p>{{ item.description }}</p>
+            <div class="p-6">
+              <span class="grid size-9 place-items-center rounded-full bg-[#003527] text-[13px] font-black text-white">{{ index + 1 }}</span>
+              <h3 class="m-0 mt-[18px] font-display text-[22px]">{{ item.title }}</h3>
+              <p class="mb-0 mt-2.5 text-sm leading-[1.6] text-[#404944]">{{ item.description }}</p>
             </div>
           </article>
         </div>
       </div>
     </section>
 
-    <section id="gusul" class="farz-section">
-      <div class="farz-container farz-purification-grid">
-        <article class="farz-purification-panel">
-          <p class="farz-kicker">Büyük temizlik</p>
-          <h2>Guslün Farzları</h2>
-          <p class="farz-panel-copy">Bütün vücudun temizlenmesi ve manevi arınma için üç temel şart.</p>
-          <ul>
-            <li v-for="item in ghuslFards" :key="item.title">
-              <span aria-hidden="true">✓</span>
+    <section id="gusul" class="py-28 max-sm:py-[72px]">
+      <div class="mx-auto grid w-[min(calc(100%_-_2rem),1200px)] grid-cols-2 gap-8 max-[980px]:grid-cols-2 max-sm:w-[min(calc(100%_-_1.75rem),1200px)] max-sm:grid-cols-1">
+        <article class="min-h-[430px] rounded-3xl border border-[#d7ded9] bg-white p-[34px] [background-image:radial-gradient(circle_at_86%_10%,rgba(0,53,39,0.06),transparent_30%)] transition duration-200 hover:-translate-y-1 hover:border-[#003527]/30 hover:shadow-[0_18px_44px_rgba(6,78,59,0.09)]">
+          <p class="m-0 text-xs font-extrabold uppercase tracking-[0.14em] text-[#003527]">Büyük temizlik</p>
+          <h2 class="m-0 mt-2.5 font-display text-[clamp(34px,4vw,52px)] font-bold leading-[1.05] text-[#003527]">Guslün Farzları</h2>
+          <p class="mb-0 mt-4 max-w-[610px] text-base leading-[1.7] text-[#404944]">Bütün vücudun temizlenmesi ve manevi arınma için üç temel şart.</p>
+          <ul class="m-0 mt-[30px] grid list-none gap-4 p-0">
+            <li v-for="item in ghuslFards" :key="item.title" class="flex gap-[14px] rounded-2xl border border-[#003527]/10 bg-[#003527]/[0.035] p-[18px]">
+              <span class="grid size-[30px] shrink-0 place-items-center rounded-full bg-[#003527] font-black text-white" aria-hidden="true">✓</span>
               <div>
-                <strong>{{ item.title }}</strong>
-                <p>{{ item.description }}</p>
+                <strong class="text-base text-[#003527]">{{ item.title }}</strong>
+                <p class="mb-0 mt-1.5 text-sm leading-[1.55] text-[#404944]">{{ item.description }}</p>
               </div>
             </li>
           </ul>
         </article>
 
-        <article id="teyemmum" class="farz-purification-panel farz-purification-panel-gold">
-          <p class="farz-kicker">Su bulunmadığında</p>
-          <h2>Teyemmümün Farzları</h2>
-          <p class="farz-panel-copy">Teyemmümün geçerli olmasını sağlayan temel farzlar.</p>
-          <ul>
-            <li v-for="item in tayammumFards" :key="item.title">
-              <span aria-hidden="true">✓</span>
+        <article id="teyemmum" class="min-h-[430px] rounded-3xl border border-[#d7ded9] bg-white p-[34px] [background-image:radial-gradient(circle_at_86%_10%,rgba(115,92,0,0.08),transparent_30%)] transition duration-200 hover:-translate-y-1 hover:border-[#003527]/30 hover:shadow-[0_18px_44px_rgba(6,78,59,0.09)]">
+          <p class="m-0 text-xs font-extrabold uppercase tracking-[0.14em] text-[#003527]">Su bulunmadığında</p>
+          <h2 class="m-0 mt-2.5 font-display text-[clamp(34px,4vw,52px)] font-bold leading-[1.05] text-[#003527]">Teyemmümün Farzları</h2>
+          <p class="mb-0 mt-4 max-w-[610px] text-base leading-[1.7] text-[#404944]">Teyemmümün geçerli olmasını sağlayan temel farzlar.</p>
+          <ul class="m-0 mt-[30px] grid list-none gap-4 p-0">
+            <li v-for="item in tayammumFards" :key="item.title" class="flex gap-[14px] rounded-2xl border border-[#735c00]/15 bg-[#735c00]/[0.045] p-[18px]">
+              <span class="grid size-[30px] shrink-0 place-items-center rounded-full bg-[#735c00] font-black text-white" aria-hidden="true">✓</span>
               <div>
-                <strong>{{ item.title }}</strong>
-                <p>{{ item.description }}</p>
+                <strong class="text-base text-[#003527]">{{ item.title }}</strong>
+                <p class="mb-0 mt-1.5 text-sm leading-[1.55] text-[#404944]">{{ item.description }}</p>
               </div>
             </li>
           </ul>
@@ -391,782 +397,3 @@ useSeoMeta({
   description: "İmanın şartları, İslam'ın şartları, namaz, abdest, gusül ve teyemmüm farzlarını sade bir rehberle öğren."
 })
 </script>
-
-<style scoped>
-.farz-page {
-  --farz-primary: #003527;
-  --farz-primary-soft: rgba(0, 53, 39, 0.08);
-  --farz-secondary: #735c00;
-  --farz-gold-soft: rgba(115, 92, 0, 0.1);
-  --farz-surface: #f8f9ff;
-  --farz-card: #ffffff;
-  --farz-muted: #404944;
-  --farz-line: #d7ded9;
-  min-height: 100vh;
-  overflow-x: hidden;
-  background: var(--farz-surface);
-  color: #121c2a;
-  font-family: Inter, system-ui, sans-serif;
-}
-
-.farz-container {
-  width: min(100% - 32px, 1200px);
-  margin-inline: auto;
-}
-
-.farz-header {
-  position: sticky;
-  top: 0;
-  z-index: 70;
-  border-bottom: 1px solid rgba(191, 201, 195, 0.65);
-  background: rgba(248, 249, 255, 0.88);
-  backdrop-filter: blur(16px);
-}
-
-.farz-nav {
-  display: grid;
-  grid-template-columns: 180px 1fr 120px;
-  align-items: center;
-  min-height: 64px;
-  gap: 24px;
-}
-
-.farz-brand,
-.farz-home-link,
-.farz-nav-link {
-  color: inherit;
-  text-decoration: none;
-}
-
-.farz-brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--farz-primary);
-  font-family: "Playfair Display", Georgia, serif;
-  font-size: 22px;
-  font-weight: 700;
-}
-
-.farz-brand-mark {
-  display: grid;
-  width: 34px;
-  height: 34px;
-  place-items: center;
-  border: 1px solid rgba(0, 53, 39, 0.16);
-  border-radius: 999px;
-  background: #fff;
-  font-size: 18px;
-}
-
-.farz-nav-links {
-  display: flex;
-  justify-content: center;
-  gap: 32px;
-}
-
-.farz-nav-link {
-  border-bottom: 2px solid transparent;
-  padding-block: 22px 18px;
-  color: var(--farz-muted);
-  font-size: 14px;
-  font-weight: 600;
-  transition: color 0.2s ease, border-color 0.2s ease;
-}
-
-.farz-nav-link:hover,
-.farz-nav-link.is-active {
-  border-color: var(--farz-secondary);
-  color: var(--farz-primary);
-}
-
-.farz-home-link {
-  justify-self: end;
-  border: 1px solid rgba(0, 53, 39, 0.14);
-  border-radius: 999px;
-  padding: 9px 15px;
-  color: var(--farz-primary);
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.farz-hero {
-  position: relative;
-  display: grid;
-  min-height: calc(100vh - 64px);
-  place-items: center;
-  overflow: hidden;
-  border-bottom: 1px solid rgba(191, 201, 195, 0.38);
-  background:
-    radial-gradient(circle at 2px 2px, rgba(0, 53, 39, 0.045) 1px, transparent 0),
-    radial-gradient(circle at 12% 26%, rgba(6, 78, 59, 0.08), transparent 24%),
-    radial-gradient(circle at 88% 78%, rgba(115, 92, 0, 0.08), transparent 24%),
-    var(--farz-surface);
-  background-size: 32px 32px, auto, auto, auto;
-}
-
-.farz-hero-glow {
-  position: absolute;
-  width: 360px;
-  height: 360px;
-  border-radius: 999px;
-  filter: blur(48px);
-  opacity: 0.35;
-}
-
-.farz-hero-glow-left {
-  left: -120px;
-  bottom: 18%;
-  background: rgba(0, 53, 39, 0.16);
-}
-
-.farz-hero-glow-right {
-  right: -120px;
-  top: 18%;
-  background: rgba(115, 92, 0, 0.16);
-}
-
-.farz-hero-inner {
-  position: relative;
-  z-index: 1;
-  padding-block: 96px;
-  text-align: center;
-}
-
-.farz-eyebrow,
-.farz-kicker {
-  margin: 0;
-  color: var(--farz-primary);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.farz-eyebrow {
-  display: inline-flex;
-  border: 1px solid rgba(0, 53, 39, 0.16);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
-  padding: 9px 18px;
-}
-
-.farz-hero h1,
-.farz-section h2 {
-  margin: 0;
-  color: var(--farz-primary);
-  font-family: "Playfair Display", Georgia, serif;
-  font-weight: 700;
-  letter-spacing: 0;
-}
-
-.farz-hero h1 {
-  margin-top: 26px;
-  font-size: clamp(58px, 8vw, 116px);
-  line-height: 0.92;
-}
-
-.farz-hero-copy {
-  max-width: 720px;
-  margin: 28px auto 0;
-  color: var(--farz-muted);
-  font-size: 20px;
-  line-height: 1.7;
-}
-
-.farz-hero-actions {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  margin-top: 44px;
-}
-
-.farz-button {
-  display: inline-flex;
-  min-height: 52px;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border-radius: 10px;
-  padding-inline: 26px;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 800;
-  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
-}
-
-.farz-button:hover {
-  transform: translateY(-2px);
-}
-
-.farz-button-primary {
-  background: var(--farz-primary);
-  color: #fff;
-  box-shadow: 0 16px 34px rgba(0, 53, 39, 0.16);
-}
-
-.farz-button-secondary {
-  border: 1px solid rgba(0, 53, 39, 0.14);
-  background: rgba(255, 255, 255, 0.74);
-  color: var(--farz-primary);
-}
-
-.farz-section {
-  padding-block: 112px;
-}
-
-.farz-section-white {
-  background: #fff;
-}
-
-.farz-section-tinted {
-  border-block: 1px solid rgba(191, 201, 195, 0.35);
-  background: #eff4ff;
-}
-
-.farz-section-heading {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 32px;
-  margin-bottom: 48px;
-}
-
-.farz-section-heading h2,
-.farz-centered-heading h2,
-.farz-purification-panel h2 {
-  margin-top: 10px;
-  font-size: clamp(34px, 4vw, 52px);
-  line-height: 1.05;
-}
-
-.farz-section-heading p,
-.farz-centered-heading p,
-.farz-panel-copy {
-  max-width: 610px;
-  margin: 16px 0 0;
-  color: var(--farz-muted);
-  font-size: 16px;
-  line-height: 1.7;
-}
-
-.farz-count {
-  color: rgba(0, 53, 39, 0.08);
-  font-family: "Playfair Display", Georgia, serif;
-  font-size: 118px;
-  font-weight: 700;
-  line-height: 0.8;
-}
-
-.farz-card-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 28px;
-}
-
-.farz-card {
-  min-height: 268px;
-  border: 1px solid var(--farz-line);
-  border-radius: 18px;
-  background:
-    radial-gradient(circle at 88% 14%, rgba(0, 53, 39, 0.06), transparent 32%),
-    var(--farz-card);
-  padding: 32px;
-  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
-}
-
-.farz-card:hover,
-.farz-abdest-card:hover,
-.farz-list-panel:hover,
-.farz-purification-panel:hover {
-  transform: translateY(-4px);
-  border-color: rgba(0, 53, 39, 0.32);
-  box-shadow: 0 18px 44px rgba(6, 78, 59, 0.09);
-}
-
-.farz-card-icon {
-  display: grid;
-  width: 50px;
-  height: 50px;
-  place-items: center;
-  border-radius: 14px;
-  background: var(--farz-primary-soft);
-  color: var(--farz-primary);
-  font-size: 20px;
-}
-
-.farz-card-number {
-  display: block;
-  margin-top: 24px;
-  color: var(--farz-secondary);
-  font-size: 12px;
-  font-weight: 900;
-  letter-spacing: 0.18em;
-}
-
-.farz-card h3 {
-  margin: 12px 0 0;
-  color: #121c2a;
-  font-family: "Playfair Display", Georgia, serif;
-  font-size: 25px;
-  line-height: 1.18;
-}
-
-.farz-card p {
-  margin: 14px 0 0;
-  color: var(--farz-muted);
-  font-size: 14px;
-  line-height: 1.65;
-}
-
-.farz-centered-heading {
-  max-width: 760px;
-  margin: 0 auto 54px;
-  text-align: center;
-}
-
-.farz-centered-heading p {
-  margin-inline: auto;
-}
-
-.farz-islam-heading {
-  align-items: flex-end;
-}
-
-.farz-islam-picker {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.farz-islam-picker-card {
-  display: flex;
-  min-height: 94px;
-  align-items: center;
-  gap: 12px;
-  border: 1px solid rgba(0, 53, 39, 0.14);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.74);
-  padding: 16px;
-  color: var(--farz-primary);
-  text-align: left;
-  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
-}
-
-.farz-islam-picker-card:hover,
-.farz-islam-picker-card.is-active {
-  border-color: var(--farz-primary);
-  background: #fffef9;
-  transform: translateY(-2px);
-}
-
-.farz-islam-picker-card span,
-.farz-shahada-topline span {
-  display: grid;
-  width: 34px;
-  height: 34px;
-  flex: 0 0 auto;
-  place-items: center;
-  border-radius: 999px;
-  background: #fed65b;
-  color: #745c00;
-  font-size: 12px;
-  font-weight: 900;
-}
-
-.farz-islam-picker-card strong {
-  font-family: "Playfair Display", Georgia, serif;
-  font-size: 18px;
-  line-height: 1.1;
-}
-
-.farz-islam-detail {
-  margin-top: 18px;
-  border: 1px solid rgba(0, 53, 39, 0.18);
-  border-radius: 24px;
-  background: #fffef9;
-  padding: 34px;
-  box-shadow: 0 16px 42px rgba(0, 53, 39, 0.06);
-}
-
-.farz-shahada-topline {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.farz-shahada-topline p,
-.farz-shahada-label,
-.farz-shahada-details p {
-  margin: 0;
-  color: var(--farz-secondary);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.farz-islam-detail h3 {
-  margin: 26px 0 0;
-  color: var(--farz-primary);
-  font-family: "Playfair Display", Georgia, serif;
-  font-size: clamp(34px, 4vw, 48px);
-  line-height: 1.05;
-}
-
-.farz-shahada-description {
-  max-width: 590px;
-  margin: 14px 0 0;
-  color: var(--farz-muted);
-  font-size: 15px;
-  line-height: 1.65;
-}
-
-.farz-shahada-text {
-  margin-top: 28px;
-  border-block: 1px solid rgba(0, 53, 39, 0.12);
-  padding-block: 20px;
-}
-
-.farz-shahada-arabic {
-  margin: 14px 0 0;
-  color: #082c23;
-  font-family: "Amiri Quran", Amiri, serif;
-  font-size: clamp(28px, 3vw, 40px);
-  line-height: 1.7;
-  text-align: right;
-}
-
-.farz-shahada-details {
-  display: grid;
-  gap: 18px;
-  margin-top: 22px;
-}
-
-.farz-shahada-details div {
-  display: grid;
-  gap: 7px;
-}
-
-.farz-shahada-details strong {
-  color: #24302a;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.65;
-}
-
-.farz-islam-detail-copy {
-  max-width: 760px;
-  margin: 18px 0 0;
-  color: var(--farz-muted);
-  font-size: 17px;
-  line-height: 1.75;
-}
-
-.farz-prayer-grid,
-.farz-purification-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 32px;
-}
-
-.farz-list-panel,
-.farz-purification-panel {
-  border: 1px solid var(--farz-line);
-  border-radius: 24px;
-  background: #fff;
-  padding: 34px;
-  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
-}
-
-.farz-list-heading {
-  display: flex;
-  gap: 18px;
-  align-items: center;
-  margin-bottom: 28px;
-}
-
-.farz-list-heading > span {
-  display: grid;
-  width: 46px;
-  height: 46px;
-  flex: 0 0 auto;
-  place-items: center;
-  border-radius: 999px;
-  background: var(--farz-primary);
-  color: #fff;
-  font-weight: 900;
-}
-
-.farz-list-panel-gold .farz-list-heading > span {
-  background: var(--farz-secondary);
-}
-
-.farz-list-heading h3 {
-  margin: 0;
-  font-family: "Playfair Display", Georgia, serif;
-  font-size: 27px;
-  line-height: 1.15;
-}
-
-.farz-list-heading p {
-  margin: 6px 0 0;
-  color: var(--farz-muted);
-  font-size: 14px;
-}
-
-.farz-list-panel ol {
-  display: grid;
-  gap: 12px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.farz-list-panel li {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  border: 1px solid rgba(191, 201, 195, 0.64);
-  border-radius: 12px;
-  background: #f8f9ff;
-  padding: 14px 16px;
-  color: #121c2a;
-  font-weight: 700;
-}
-
-.farz-list-panel li span {
-  display: grid;
-  width: 34px;
-  height: 34px;
-  flex: 0 0 auto;
-  place-items: center;
-  border-radius: 10px;
-  background: var(--farz-primary-soft);
-  color: var(--farz-primary);
-  font-size: 12px;
-  font-weight: 900;
-}
-
-.farz-list-panel-gold li span {
-  background: var(--farz-gold-soft);
-  color: var(--farz-secondary);
-}
-
-.farz-list-panel li strong {
-  display: block;
-  color: #121c2a;
-  font-size: 15px;
-}
-
-.farz-list-panel li p {
-  margin: 5px 0 0;
-  color: var(--farz-muted);
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 1.55;
-}
-
-.farz-abdest-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 24px;
-}
-
-.farz-abdest-card {
-  overflow: hidden;
-  border: 1px solid var(--farz-line);
-  border-radius: 22px;
-  background: #fff;
-  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
-}
-
-.farz-abdest-image {
-  height: 178px;
-  overflow: hidden;
-  background: var(--farz-primary-soft);
-}
-
-.farz-abdest-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.35s ease;
-}
-
-.farz-abdest-card:hover img {
-  transform: scale(1.05);
-}
-
-.farz-abdest-body {
-  padding: 24px;
-}
-
-.farz-abdest-body span {
-  display: grid;
-  width: 36px;
-  height: 36px;
-  place-items: center;
-  border-radius: 999px;
-  background: var(--farz-primary);
-  color: #fff;
-  font-size: 13px;
-  font-weight: 900;
-}
-
-.farz-abdest-body h3 {
-  margin: 18px 0 0;
-  font-family: "Playfair Display", Georgia, serif;
-  font-size: 22px;
-}
-
-.farz-abdest-body p {
-  margin: 10px 0 0;
-  color: var(--farz-muted);
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-.farz-purification-panel {
-  min-height: 430px;
-  background:
-    radial-gradient(circle at 86% 10%, rgba(0, 53, 39, 0.06), transparent 30%),
-    #fff;
-}
-
-.farz-purification-panel-gold {
-  background:
-    radial-gradient(circle at 86% 10%, rgba(115, 92, 0, 0.08), transparent 30%),
-    #fff;
-}
-
-.farz-purification-panel ul {
-  display: grid;
-  gap: 16px;
-  margin: 30px 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.farz-purification-panel li {
-  display: flex;
-  gap: 14px;
-  border: 1px solid rgba(0, 53, 39, 0.1);
-  border-radius: 16px;
-  background: rgba(0, 53, 39, 0.035);
-  padding: 18px;
-}
-
-.farz-purification-panel-gold li {
-  border-color: rgba(115, 92, 0, 0.14);
-  background: rgba(115, 92, 0, 0.045);
-}
-
-.farz-purification-panel li > span {
-  display: grid;
-  width: 30px;
-  height: 30px;
-  flex: 0 0 auto;
-  place-items: center;
-  border-radius: 999px;
-  background: var(--farz-primary);
-  color: #fff;
-  font-weight: 900;
-}
-
-.farz-purification-panel-gold li > span {
-  background: var(--farz-secondary);
-}
-
-.farz-purification-panel strong {
-  color: var(--farz-primary);
-  font-size: 16px;
-}
-
-.farz-purification-panel li p {
-  margin: 6px 0 0;
-  color: var(--farz-muted);
-  font-size: 14px;
-  line-height: 1.55;
-}
-
-@media (max-width: 980px) {
-  .farz-nav {
-    grid-template-columns: 1fr auto;
-  }
-
-  .farz-nav-links {
-    display: none;
-  }
-
-  .farz-card-grid,
-  .farz-prayer-grid,
-  .farz-abdest-grid,
-  .farz-purification-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .farz-islam-picker {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 640px) {
-  .farz-container {
-    width: min(100% - 28px, 1200px);
-  }
-
-  .farz-nav {
-    min-height: 60px;
-  }
-
-  .farz-home-link {
-    display: none;
-  }
-
-  .farz-hero {
-    min-height: 640px;
-  }
-
-  .farz-hero-inner {
-    padding-block: 72px;
-  }
-
-  .farz-hero h1 {
-    font-size: 58px;
-  }
-
-  .farz-hero-copy {
-    font-size: 17px;
-  }
-
-  .farz-hero-actions {
-    flex-direction: column;
-  }
-
-  .farz-section {
-    padding-block: 72px;
-  }
-
-  .farz-section-heading {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .farz-count {
-    font-size: 72px;
-  }
-
-  .farz-card-grid,
-  .farz-prayer-grid,
-  .farz-abdest-grid,
-  .farz-purification-grid,
-  .farz-islam-picker {
-    grid-template-columns: 1fr;
-  }
-
-  .farz-islam-detail {
-    padding: 24px;
-  }
-}
-</style>
