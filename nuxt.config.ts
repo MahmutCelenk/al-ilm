@@ -1,11 +1,20 @@
 export default defineNuxtConfig({
-  modules: ['@nuxt/content', '@pinia/nuxt', '@nuxtjs/tailwindcss'],
+  modules: [
+    '@nuxt/content',
+    '@pinia/nuxt',
+    '@nuxtjs/tailwindcss',
+    "nitro-cloudflare-dev"
+  ],
+
   css: ['~/assets/css/main.css'],
   compatibilityDate: '2026-06-04',
+
   future: {
     compatibilityVersion: 4
   },
+
   devtools: { enabled: true },
+
   app: {
     head: {
       htmlAttrs: {
@@ -28,11 +37,21 @@ export default defineNuxtConfig({
       ]
     }
   },
+
   content: {
     build: {
       markdown: {
         highlight: false
       }
+    }
+  },
+
+  nitro: {
+    preset: "cloudflare_module",
+
+    cloudflare: {
+      deployConfig: true,
+      nodeCompat: true
     }
   }
 })
