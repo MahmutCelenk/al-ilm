@@ -2,7 +2,7 @@
 title: Kur’an Okumaya Başlangıç İçin Sakin Bir Yol
 description: Kur’an okumaya başlamak isteyenler için harfler, telaffuz, düzenli tekrar ve anlamla bağ kurma üzerine temel bir öğrenme planı.
 category: Kur’an
-image: /images/articles/quran-cover.png
+image: /images/articles/quran-reading-cover.png
 imageAlt: Kur’an okumaya başlamak için sakin bir öğrenme alanı
 readTime: 7 dk okuma
 order: 4
@@ -14,7 +14,7 @@ title: Kur’an Okumaya Başlangıç İçin Sakin Bir Yol
 description: Kur’an okumaya başlamak isteyenler için harfler, telaffuz, düzenli tekrar ve anlamla bağ kurma üzerine temel bir öğrenme planı.
 category: Kur’an
 readTime: 7 dk okuma
-image: /images/articles/quran-cover.png
+image: /images/articles/quran-reading-cover.png
 imageAlt: Kur’an okumaya başlamak için sakin bir öğrenme alanı
 toc:
   - label: İlk hedef

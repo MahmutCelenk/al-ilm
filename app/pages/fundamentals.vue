@@ -335,25 +335,25 @@ const ablutionFards: AblutionItem[] = [
   {
     title: 'Yüzü Yıkamak',
     description: 'Alın saç bitiminden çene altına, kulak yumuşaklarına kadar yüzü yıkamak.',
-    image: '/images/articles/abdest-yuzu-yikamak.png',
+    image: '/images/articles/wudu-wash-face.png',
     alt: 'Abdest alırken yüzü yıkamak'
   },
   {
     title: 'Kolları Yıkamak',
     description: 'Ellerle beraber dirsekleri de dahil ederek kolları yıkamak.',
-    image: '/images/articles/abdest-kollari-yikamak.png',
+    image: '/images/articles/wudu-wash-arms.png',
     alt: 'Abdest alırken kolları dirseklerle birlikte yıkamak'
   },
   {
     title: 'Başa Mesh Etmek',
     description: 'Başın en az bir kısmını ıslak el ile mesh etmek.',
-    image: '/images/articles/abdest-basa-mesh.png',
+    image: '/images/articles/wudu-wipe-head.png',
     alt: 'Abdest alırken başa mesh etmek'
   },
   {
     title: 'Ayakları Yıkamak',
     description: 'Topuklarla birlikte ayakları yıkamak.',
-    image: '/images/articles/abdest-ayaklari-yikamak.png',
+    image: '/images/articles/wudu-wash-feet.png',
     alt: 'Abdest alırken ayakları topuklarla birlikte yıkamak'
   }
 ]

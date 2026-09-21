@@ -13,6 +13,8 @@
 </template>
 
 <script setup lang="ts">
+import { articleGuides } from '~/data/articleGuides'
+
 useSeoMeta({
   title: 'Ana Sayfa',
   description: 'Al-Ilm İslami eğitim platformunun arama ve başlangıç sayfası.'
@@ -68,76 +70,36 @@ type SearchSuggestion = {
   priority: number
 }
 
-const fallbackArticles: HomeArticle[] = [
-  {
-    path: '/articles/namaz-nasil-kilinir',
-    title: 'Namaz Nasıl Kılınır? Yeni Başlayanlar İçin Sıralı Rehber',
-    description: 'Namaza yeni başlayanlar için hazırlık şartlarını, niyeti, tekbiri, kıyamı, rükûyu, secdeyi ve oturuşu anlaşılır bir sırayla anlatan temel rehber.',
-    category: 'İbadet',
-    image: '/images/articles/namaz-cover.png',
-    imageAlt: 'Sakin ve modern bir mescid iç mekanı',
-    readTime: '10 dk okuma',
-    order: 1
-  },
-  {
-    path: '/articles/abdest-nasil-alinir',
-    title: 'Abdest Nasıl Alınır? Adım Adım Temizlik Rehberi',
-    description: 'Namazdan önce alınan abdestin anlamını, sırasını, farzlarını ve öğrenirken dikkat edilmesi gereken temel noktaları açıklayan başlangıç rehberi.',
-    category: 'İbadet',
-    image: '/images/articles/abdest-cover.png',
-    imageAlt: 'Abdest için temiz su ve sakin bir hazırlık alanı',
-    readTime: '8 dk okuma',
-    order: 2
-  },
-  {
-    path: '/articles/namazda-okunan-dualar',
-    title: 'Namazda Okunan Dualar ve Kısa Anlamları',
-    description: 'Namazda okunan temel dua ve tesbihleri, hangi bölümde okunduklarını ve öğrenmeye nereden başlanacağını açıklayan sade rehber.',
-    category: 'İbadet',
-    image: '/images/articles/dualar-cover.png',
-    imageAlt: 'Namaz dualarını çalışmak için sakin bir okuma masası',
-    readTime: '9 dk okuma',
-    order: 3
-  },
-  {
-    path: '/articles/kuran-okumaya-baslangic',
-    title: 'Kur’an Okumaya Başlangıç İçin Sakin Bir Yol',
-    description: 'Kur’an okumaya başlamak isteyenler için harfler, telaffuz, düzenli tekrar ve anlamla bağ kurma üzerine temel bir öğrenme planı.',
-    category: 'Kur’an',
-    image: '/images/articles/quran-cover.png',
-    imageAlt: 'Kur’an okumaya başlamak için sakin bir öğrenme alanı',
-    readTime: '7 dk okuma',
-    order: 4
-  },
-  {
-    path: '/articles/hadis-okuma-adabi',
-    title: 'Hadis Okuma Adabı: Nereden ve Nasıl Başlanır?',
-    description: 'Hadis okumaya yeni başlayanlar için kaynak seçimi, bağlamı anlama, acele hüküm vermeme ve düzenli not alma üzerine giriş rehberi.',
-    category: 'Hadis',
-    image: '/images/articles/hadis-cover.png',
-    imageAlt: 'Hadis okumak için sakin bir çalışma masası',
-    readTime: '6 dk okuma',
-    order: 5
-  }
-]
-
 const articleList = computed<HomeArticle[]>(() => {
   const collectionArticles = (articles.value ?? []).filter((article) => article.path?.startsWith('/articles/'))
 
   if (!collectionArticles.length) {
-    return fallbackArticles
+    return Object.entries(articleGuides).map(([slug, article]) => ({
+      path: `/articles/${slug}`,
+      title: article.title,
+      description: article.description,
+      category: article.category,
+      image: article.image,
+      imageAlt: article.imageAlt,
+      readTime: article.readTime,
+      order: article.order
+    }))
   }
 
-  return collectionArticles.map((article) => ({
-    path: article.path,
-    title: article.title,
-    description: article.description,
-    category: article.category,
-    image: article.image,
-    imageAlt: article.imageAlt,
-    readTime: article.readTime,
-    order: article.order
-  }))
+  return collectionArticles.map((article) => {
+    const slug = article.path.split('/').pop() ?? ''
+    const guide = articleGuides[slug]
+    return {
+      path: article.path,
+      title: guide?.title ?? article.title,
+      description: guide?.description ?? article.description,
+      category: guide?.category ?? article.category,
+      image: guide?.image ?? article.image,
+      imageAlt: guide?.imageAlt ?? article.imageAlt,
+      readTime: guide?.readTime ?? article.readTime,
+      order: guide?.order ?? article.order
+    }
+  })
 })
 
 const filteredArticles = computed(() => {

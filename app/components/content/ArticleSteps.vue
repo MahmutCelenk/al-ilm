@@ -13,6 +13,18 @@
         <div>
           <h4 class="font-display text-xl font-semibold text-tertiary">{{ step.title }}</h4>
           <p class="mt-2 text-[15px] leading-7 text-on-surface-variant">{{ step.body }}</p>
+          <p v-if="step.detail" class="mt-3 rounded-xl bg-surface-container-low px-4 py-3 text-sm leading-7 text-on-surface-variant">
+            <span class="font-bold text-primary">Nasıl yapılır?</span>
+            {{ step.detail }}
+          </p>
+          <p v-if="step.attention" class="mt-3 border-l-2 border-secondary bg-secondary-container/15 px-4 py-3 text-sm leading-7 text-on-surface-variant">
+            <span class="font-bold text-on-secondary-container">Dikkat:</span>
+            {{ step.attention }}
+          </p>
+          <figure v-if="step.image" class="mt-5 overflow-hidden rounded-2xl border border-outline-variant/50 bg-surface-container-low">
+            <img :src="step.image.src" :alt="step.image.alt" class="aspect-[3/2] w-full object-cover" loading="lazy">
+            <figcaption class="px-4 py-3 text-xs leading-5 text-on-surface-variant">{{ step.image.caption }}</figcaption>
+          </figure>
           <div v-if="step.recitations?.length" class="mt-5 space-y-3">
             <div
               v-for="recitation in step.recitations"
@@ -22,7 +34,7 @@
               <p v-if="recitation.title" class="mb-3 text-xs font-bold uppercase tracking-wide text-primary">
                 {{ recitation.title }}
               </p>
-              <p class="font-serif text-2xl leading-[2.1] text-primary md:text-3xl" dir="rtl" lang="ar">
+              <p class="recitation-arabic text-2xl leading-[2.1] text-primary md:text-3xl" dir="rtl" lang="ar">
                 {{ recitation.arabic }}
               </p>
               <p v-if="recitation.latin" class="mt-4 text-sm font-semibold leading-7 text-tertiary">
@@ -48,6 +60,13 @@ defineProps<{
   steps: Array<{
     title: string
     body: string
+    detail?: string
+    attention?: string
+    image?: {
+      src: string
+      alt: string
+      caption: string
+    }
     recitations?: Array<{
       title?: string
       arabic: string
@@ -57,3 +76,12 @@ defineProps<{
   }>
 }>()
 </script>
+
+<style scoped>
+.recitation-arabic {
+  font-family: 'Amiri', 'Noto Naskh Arabic', 'Traditional Arabic', serif;
+  font-weight: 400;
+  letter-spacing: normal;
+  word-spacing: normal;
+}
+</style>

@@ -2,7 +2,7 @@
 title: "Hadis Okuma Adabı: Nereden ve Nasıl Başlanır?"
 description: Hadis okumaya yeni başlayanlar için kaynak seçimi, bağlamı anlama, acele hüküm vermeme ve düzenli not alma üzerine giriş rehberi.
 category: Hadis
-image: /images/articles/hadis-cover.png
+image: /images/articles/hadith-cover.png
 imageAlt: Hadis okumak için sakin bir çalışma masası
 readTime: 6 dk okuma
 order: 5
@@ -14,7 +14,7 @@ title: "Hadis Okuma Adabı: Nereden ve Nasıl Başlanır?"
 description: Hadis okumaya yeni başlayanlar için kaynak seçimi, bağlamı anlama, acele hüküm vermeme ve düzenli not alma üzerine giriş rehberi.
 category: Hadis
 readTime: 6 dk okuma
-image: /images/articles/hadis-cover.png
+image: /images/articles/hadith-cover.png
 imageAlt: Hadis okumak için sakin bir çalışma masası
 toc:
   - label: Güvenilir kaynak
@@ -36,7 +36,7 @@ Hadis okumaya başlarken güvenilir ve açıklamalı kaynaklar tercih edilmelidi
 eyebrow: Kaynak seçimi
 title: Açıklamalı eserlerle başla
 ---
-İlk aşamada kısa seçkiler ve güvenilir şerhler daha sağlıklı bir zemin sunar. Böylece metin, bağlamından kopmadan ve acele yorumlanmadan okunur.
+İlk aşamada kısa seçkilerde Arapça metni, Türkçe anlamı, râviyi, kaynak künyesini ve açıklamayı birlikte incelemek daha sağlıklı bir zemin sunar. Böylece metin, bağlamından kopmadan ve acele yorumlanmadan okunur.
 ::
 
 ## Bağlamı anlamak

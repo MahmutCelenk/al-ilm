@@ -2,7 +2,7 @@
 title: Namazda Okunan Dualar ve Kısa Anlamları
 description: Namazda okunan temel dua ve tesbihleri, hangi bölümde okunduklarını ve öğrenmeye nereden başlanacağını açıklayan sade rehber.
 category: İbadet
-image: /images/articles/dualar-cover.png
+image: /images/articles/prayer-duas-cover.png
 imageAlt: Namaz dualarını çalışmak için sakin bir okuma masası
 readTime: 9 dk okuma
 order: 3
@@ -14,7 +14,7 @@ title: Namazda Okunan Dualar ve Kısa Anlamları
 description: Namazda okunan temel dua ve tesbihleri, hangi bölümde okunduklarını ve öğrenmeye nereden başlanacağını açıklayan sade rehber.
 category: İbadet
 readTime: 9 dk okuma
-image: /images/articles/dualar-cover.png
+image: /images/articles/prayer-duas-cover.png
 imageAlt: Namaz dualarını çalışmak için sakin bir okuma masası
 toc:
   - label: Önce hangi dualar öğrenilir?

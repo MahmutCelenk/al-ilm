@@ -2,7 +2,7 @@
 title: Namaz Nasıl Kılınır? Yeni Başlayanlar İçin Sıralı Rehber
 description: Namaza yeni başlayanlar için hazırlık şartlarını, niyeti, tekbiri, kıyamı, rükûyu, secdeyi ve oturuşu anlaşılır bir sırayla anlatan temel rehber.
 category: İbadet
-image: /images/articles/namaz-cover.png
+image: /images/articles/prayer-cover.png
 imageAlt: Sakin ve modern bir mescid iç mekanı
 readTime: 10 dk okuma
 order: 1
@@ -14,7 +14,7 @@ title: Namaz Nasıl Kılınır? Yeni Başlayanlar İçin Sıralı Rehber
 description: Namaza yeni başlayanlar için hazırlık şartlarını, niyeti, tekbiri, kıyamı, rükûyu, secdeyi ve oturuşu anlaşılır bir sırayla anlatan temel rehber.
 category: İbadet
 readTime: 10 dk okuma
-image: /images/articles/namaz-cover.png
+image: /images/articles/prayer-cover.png
 imageAlt: Sakin ve modern bir mescid iç mekanı
 toc:
   - label: Namaza başlamadan önce

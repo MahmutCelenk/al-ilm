@@ -10,6 +10,8 @@
 </template>
 
 <script setup lang="ts">
+import { articleGuides } from '~/data/articleGuides'
+
 const route = useRoute()
 const path = computed(() => `/articles/${(route.params.slug as string[]).join('/')}`)
 const knownSlugs = [
@@ -31,9 +33,10 @@ const { data: page } = await useAsyncData(path.value, () => {
 })
 
 const contentPage = computed(() => page.value as { title?: string; description?: string } | null)
+const fallbackArticle = computed(() => articleGuides[currentSlug.value])
 
 useSeoMeta({
-  title: () => contentPage.value?.title ?? 'İçerik',
-  description: () => contentPage.value?.description ?? 'Al-Ilm içerik sayfası.'
+  title: () => contentPage.value?.title ?? fallbackArticle.value?.title ?? 'İçerik',
+  description: () => contentPage.value?.description ?? fallbackArticle.value?.description ?? 'Al-Ilm içerik sayfası.'
 })
 </script>

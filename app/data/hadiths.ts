@@ -1,13 +1,18 @@
 ﻿export type HadithItem = {
   id: number
   title: string
+  narrator: string
+  text: string
+  arabic: string
   meaning: string
   topic: string
   reference: string
   sourceUrl: string
 }
 
-export const hadiths = [
+import { canonicalHadithTexts, hadithTextAliases } from './hadithTexts'
+
+const hadithSummaries = [
   {
     id: 1,
     title: 'Ameller niyete göredir',
@@ -329,4 +334,15 @@ export const hadiths = [
     sourceUrl: 'https://sunnah.com/muslim:91'
   }
 ]
+
+export const hadiths: HadithItem[] = hadithSummaries.map((hadith) => {
+  const textId = hadithTextAliases[hadith.id] ?? hadith.id
+  const canonical = canonicalHadithTexts[textId]
+
+  if (!canonical) {
+    throw new Error(`Hadis metni bulunamadı: ${hadith.id}`)
+  }
+
+  return { ...hadith, ...canonical }
+})
 

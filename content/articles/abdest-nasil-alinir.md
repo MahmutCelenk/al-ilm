@@ -2,7 +2,7 @@
 title: Abdest Nasıl Alınır? Adım Adım Temizlik Rehberi
 description: Namazdan önce alınan abdestin anlamını, sırasını, farzlarını ve öğrenirken dikkat edilmesi gereken temel noktaları açıklayan başlangıç rehberi.
 category: İbadet
-image: /images/articles/abdest-cover.png
+image: /images/articles/wudu-cover.png
 imageAlt: Abdest için temiz su ve sakin bir hazırlık alanı
 readTime: 8 dk okuma
 order: 2
@@ -14,7 +14,7 @@ title: Abdest Nasıl Alınır? Adım Adım Temizlik Rehberi
 description: Namazdan önce alınan abdestin anlamını, sırasını, farzlarını ve öğrenirken dikkat edilmesi gereken temel noktaları açıklayan başlangıç rehberi.
 category: İbadet
 readTime: 8 dk okuma
-image: /images/articles/abdest-cover.png
+image: /images/articles/wudu-cover.png
 imageAlt: Abdest için temiz su ve sakin bir hazırlık alanı
 toc:
   - label: Abdestin anlamı

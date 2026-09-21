@@ -13,6 +13,6 @@ definePageMeta({
 
 useSeoMeta({
   title: 'Hadis Kütüphanesi',
-  description: 'Al-Ilm hadis kütüphanesinde sahih hadisleri konu, kaynak ve kısa anlamlarıyla oku.'
+  description: 'Sahih hadisleri Türkçe metni, Arapça aslı, râvisi, kısa açıklaması ve kaynak bağlantısıyla oku.'
 })
 </script>
